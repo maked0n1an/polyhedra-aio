@@ -2,10 +2,11 @@ import time
 import asyncio
 from loguru import logger
 from util.data import DATA
+from util.chain import Chain
 
 
 class Help:
-    async def check_status_tx(self, tx_hash, ):
+    async def check_status_tx(self, tx_hash):
         scan = DATA[self.chain]['scan']
 
         logger.info(

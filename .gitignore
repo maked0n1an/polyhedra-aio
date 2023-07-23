@@ -1,7 +1,8 @@
 ### venv template
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
-input_data/
+input_data/private_keys.txt
+input_data/proxies.txt
 .Python
 [Bb]in
 [Ii]nclude

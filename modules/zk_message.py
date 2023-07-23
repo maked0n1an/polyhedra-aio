@@ -14,18 +14,17 @@ from moralis import evm_api
 from input_data.config import *
 from modules.help import Help
 from util.data import DATA
-from util.rpcs import Rpc 
 from util.chain import Chain
 
 
 class ZkMessage(Help):
-    def __init__(self, privatekey, chain: Chain, to_chain, delay, proxy=None):
-        self.privatekey = privatekey
+    def __init__(self, private_key, chain: Chain, to_chain, delay, proxy=None):
+        self.privatekey = private_key
         self.chain = chain
         self.chain_name = self.chain.name
         self.to_chain = random.choice(to_chain) if type(to_chain) == list else to_chain
-        self.w3 = Web3(Web3.AsyncHTTPProvider(rpcs[self.chain]),
-                                 modules={'eth': (AsyncEth,)}, middlewares=[])
+        self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.chain]['rpc']),
+                    modules={'eth': (AsyncEth,)}, middlewares=[])
         self.scan = DATA[self.chain]['scan']
         self.account = self.w3.eth.account.from_key(self.privatekey)
         self.address = self.account.address
@@ -229,7 +228,7 @@ class ZkMessage(Help):
                     'maxPriorityFeePerGas': int((await self.w3.eth.gas_price) * 0.8)
                 })
 
-                tx = Help.set_gas_price_for_bsc_or_core(tx)
+                tx = await self.set_gas_price_for_bsc_or_core(tx)
 
                 sign = self.account.sign_transaction(tx)
                 hash_ = await self.w3.eth.send_raw_transaction(sign.rawTransaction)

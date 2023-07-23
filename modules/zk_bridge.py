@@ -15,24 +15,23 @@ from info import *
 from input_data.config import *
 from modules.help import Help
 from util.data import DATA
-from util.rpcs import Rpc 
 from util.chain import Chain
 
 
 class ZkBridge(Help):
-    def __init__(self, privatekey, chain: Chain, to_chain: Chain, api, nft, delay, proxy=None):
-        self.privatekey = privatekey
+    def __init__(self, private_key, chain: Chain, to_chain: Chain, nft, delay, proxy=None):
+        self.private_key = private_key
         self.chain = chain
         self.to_chain = random.choice(to_chain) if type(to_chain) == list else to_chain
         self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.chain]['rpc']),
-                       modules={'eth': (AsyncEth,)}, middlewares=[])
-        self.account = self.w3.eth.account.from_key(self.privatekey)
+                    modules={'eth': (AsyncEth,)}, middlewares=[])
+        self.account = self.w3.eth.account.from_key(self.private_key)
         self.address = self.account.address
         self.nft = random.choice(nft) if type(nft) == list else nft
         self.delay = delay
         self.proxy = proxy or None
-        self.moralisapi = api
-        self.nft_address = nfts_addresses[self.nft][Chain.BSC]
+        self.moralisapi = MORALIS_API_KEY
+        self.nft_address = nfts_addresses[self.nft][self.chain]
         self.bridge_address = nft_lz_bridge_addresses[self.chain] if self.nft == 'Pandra' and self.to_chain != Chain.COMBO else nft_bridge_addresses[self.chain]
 
     async def auth(self):
@@ -66,7 +65,7 @@ class ZkBridge(Help):
                             msg = json.loads(await response.text())
                             msg = msg['message']
                             msg = encode_defunct(text=msg)
-                            sign = self.w3.eth.account.sign_message(msg, private_key=self.privatekey)
+                            sign = self.w3.eth.account.sign_message(msg, private_key=self.private_key)
                             signature = self.w3.to_hex(sign.signature)
                             json_data = {
                                 'publicKey': self.address,
@@ -173,13 +172,13 @@ class ZkBridge(Help):
         while True:
             zkNft = self.w3.eth.contract(address=Web3.to_checksum_address(self.nft_address), abi=zk_nft_abi)
             headers = await self.profile()
-            if not headers:
-                print("Headers are not set")
+            if headers is None:
+                logger.error("Headers are not set up")
                 return False
             try:
                 nonce = await self.w3.eth.get_transaction_count(self.address)
                 await asyncio.sleep(2)
-                
+
                 tx = await zkNft.functions.mint().build_transaction({
                     'from': self.address,
                     'gas': await zkNft.functions.mint().estimate_gas(
@@ -189,10 +188,10 @@ class ZkBridge(Help):
                     'maxPriorityFeePerGas': int((await self.w3.eth.gas_price) * 0.8)
                 })
                 
-                tx = Help.set_gas_price_for_bsc_or_core(tx)
+                tx = await self.set_gas_price_for_bsc_or_core(tx) 
                 scan = DATA[self.chain]['scan']
 
-                logger.info(f'{self.address}:{self.chain.name} - начинаю минт {self.nft}...')
+                logger.info(f'{self.address}:{self.chain.name} - started minting {self.nft}...')
                 sign = self.account.sign_transaction(tx)
                 hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
                 status = await self.check_status_tx(hash)
@@ -228,6 +227,7 @@ class ZkBridge(Help):
         logger.info(f'Начинаю работу через {time_} cекунд...')
         await asyncio.sleep(time_)
         id_ = await self.balance_and_get_id()
+
         headers = await self.profile()
         if headers is None:
             return False
@@ -238,12 +238,9 @@ class ZkBridge(Help):
                 await asyncio.sleep(5)
                 id_ = await self.balance_and_get_id()
                 if not id_:
-                    return self.privatekey, self.address, f'not {self.nft} on wallet'
+                    return self.private_key, self.address, f'not {self.nft} on wallet'
             else:
-                return self.privatekey, self.address, f'error {self.nft}'
-
-        if self.nft == 'greenfield':
-            return self.privatekey, self.address, f'succesfully minted greenfield'
+                return self.private_key, self.address, f'error {self.nft}'
 
         zkNft = self.w3.eth.contract(address=Web3.to_checksum_address(self.nft_address), abi=zk_nft_abi)
 
@@ -267,7 +264,7 @@ class ZkBridge(Help):
                         'maxPriorityFeePerGas': int((await self.w3.eth.gas_price) * 0.8)
                     })
 
-                    tx = Help.set_gas_price_for_bsc_or_core(tx)
+                    tx = await self.set_gas_price_for_bsc_or_core(tx)
                     scan = DATA[self.chain]['scan']
 
                     logger.info(f'{self.address}:{self.chain.name} - начинаю апрув {self.nft} {id_}...')
@@ -341,7 +338,7 @@ class ZkBridge(Help):
                                 'maxPriorityFeePerGas': int((await self.w3.eth.gas_price) * 0.8)
                         })
 
-                    tx = Help.set_gas_price_for_bsc_or_core(tx)
+                    tx = await self.set_gas_price_for_bsc_or_core(tx)
                     scan = DATA[self.chain]['scan']
 
                     sign = self.account.sign_transaction(tx)
@@ -352,7 +349,7 @@ class ZkBridge(Help):
                         logger.success(
                             f'{self.address}:{self.chain.name} - успешно бриджанул {self.nft} {id_} в {self.to_chain.name}: {scan}{self.w3.to_hex(hash)}...')
                         await self.sleep_indicator(random.randint(1, 20))
-                        return self.privatekey, self.address, f'successfully bridged {self.nft} to {self.to_chain.name}'
+                        return self.private_key, self.address, f'successfully bridged {self.nft} to {self.to_chain.name}'
                     else:
                         logger.info(f'{self.address}:{self.chain.name} - пробую бриджить еще раз...')
                         await bridge_()
@@ -362,15 +359,15 @@ class ZkBridge(Help):
                         logger.error(
                             f'{self.address}:{self.chain.name} - не хватает денег на газ, заканчиваю работу через 5 секунд...')
                         await asyncio.sleep(5)
-                        return self.privatekey, self.address, f'error bridge {self.nft} - not gas'
+                        return self.private_key, self.address, f'error bridge {self.nft} - not gas'
                     if 'nonce too low' in error or 'already known' in error:
                         logger.info(f'{self.address}:{self.chain.name} - ошибка при бридже, пробую еще раз...')
                         await bridge_()
                     else:
                         logger.error(f'{self.address}:{self.chain.name} - {e}')
-                        return self.privatekey, self.address, f'error bridge {self.nft} - {e}'
+                        return self.private_key, self.address, f'error bridge {self.nft} - {e}'
 
         if await approve_nft(self):
             return await bridge_()
         else:
-            return self.privatekey, self.address, f'error approve {self.nft}'
+            return self.private_key, self.address, f'error approve {self.nft}'
