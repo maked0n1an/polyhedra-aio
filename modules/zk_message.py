@@ -213,6 +213,7 @@ class ZkMessage(Help):
                 logger.info(
                     f'{self.address}:{self.chain_name} - начинаю отправку сообщения в {self.to_chain} через L0, предполагаемая комса - {(fee + zkFee) / 10 ** 18} {native_}...')
                 nonce = await self.w3.eth.get_transaction_count(self.address)
+                
                 tx = await mailer.functions.sendMessage(to_chain_id, dst_address, lz_id, lzdst_address, fee,
                                                         self.address,
                                                         message).build_transaction({
@@ -228,14 +229,7 @@ class ZkMessage(Help):
                     'maxPriorityFeePerGas': int((await self.w3.eth.gas_price) * 0.8)
                 })
 
-                if self.chain == 'bsc':
-                    del tx['maxFeePerGas']
-                    del tx['maxPriorityFeePerGas']
-                    tx['gasPrice'] = await self.w3.to_wei(1, 'gwei')
-                if self.chain == 'core':
-                    del tx['maxFeePerGas']
-                    del tx['maxPriorityFeePerGas']
-                    tx['gasPrice'] = await self.w3.eth.gas_price
+                tx = Help.set_gas_price_for_bsc_or_core(tx)
 
                 sign = self.account.sign_transaction(tx)
                 hash_ = await self.w3.eth.send_raw_transaction(sign.rawTransaction)

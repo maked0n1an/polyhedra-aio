@@ -29,3 +29,15 @@ class Help:
     async def sleep_indicator(self, secs):
         logger.info(f'{self.address} - жду {secs} секунд...')
         await asyncio.sleep(secs)
+
+    async def set_gas_price_for_bsc_or_core(self, tx):
+        if self.chain == Chain.BSC:
+            del tx['maxFeePerGas']
+            del tx['maxPriorityFeePerGas']
+            tx['gasPrice'] = self.w3.to_wei(1, 'gwei')
+        if self.chain == Chain.CORE:
+            del tx['maxFeePerGas']
+            del tx['maxPriorityFeePerGas']
+            tx['gasPrice'] = await self.w3.eth.gas_price
+
+        return tx

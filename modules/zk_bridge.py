@@ -23,7 +23,6 @@ class ZkBridge(Help):
     def __init__(self, privatekey, chain: Chain, to_chain: Chain, api, nft, delay, proxy=None):
         self.privatekey = privatekey
         self.chain = chain
-        self.chain.name = chain.name
         self.to_chain = random.choice(to_chain) if type(to_chain) == list else to_chain
         self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.chain]['rpc']),
                        modules={'eth': (AsyncEth,)}, middlewares=[])
@@ -144,8 +143,6 @@ class ZkBridge(Help):
 
                 result = evm_api.nft.get_wallet_nfts(api_key=api_key, params=params)
 
-                logger.info("we have here")
-
                 id_ = int(result['result'][0]['token_id'])
                 if id_:
                     logger.success(f'{self.address}:{self.chain.name} - успешно найдена {self.nft} {id_}...')
@@ -191,16 +188,8 @@ class ZkBridge(Help):
                     'maxFeePerGas': int(await self.w3.eth.gas_price),
                     'maxPriorityFeePerGas': int((await self.w3.eth.gas_price) * 0.8)
                 })
-
-                if self.chain == Chain.BSC:
-                    del tx['maxFeePerGas']
-                    del tx['maxPriorityFeePerGas']
-                    tx['gasPrice'] = self.w3.to_wei(1, 'gwei')
-                if self.chain == Chain.CORE:
-                    del tx['maxFeePerGas']
-                    del tx['maxPriorityFeePerGas']
-                    tx['gasPrice'] = await self.w3.eth.gas_price
-
+                
+                tx = Help.set_gas_price_for_bsc_or_core(tx)
                 scan = DATA[self.chain]['scan']
 
                 logger.info(f'{self.address}:{self.chain.name} - начинаю минт {self.nft}...')
@@ -253,8 +242,6 @@ class ZkBridge(Help):
             else:
                 return self.privatekey, self.address, f'error {self.nft}'
 
-        logger.info("before greenfield")
-
         if self.nft == 'greenfield':
             return self.privatekey, self.address, f'succesfully minted greenfield'
 
@@ -280,15 +267,7 @@ class ZkBridge(Help):
                         'maxPriorityFeePerGas': int((await self.w3.eth.gas_price) * 0.8)
                     })
 
-                    if self.chain == Chain.BSC:
-                        del tx['maxFeePerGas']
-                        del tx['maxPriorityFeePerGas']
-                        tx['gasPrice'] = self.w3.to_wei(1, 'gwei')
-                    if self.chain == Chain.CORE:
-                        del tx['maxFeePerGas']
-                        del tx['maxPriorityFeePerGas']
-                        tx['gasPrice'] = await self.w3.eth.gas_price
-
+                    tx = Help.set_gas_price_for_bsc_or_core(tx)
                     scan = DATA[self.chain]['scan']
 
                     logger.info(f'{self.address}:{self.chain.name} - начинаю апрув {self.nft} {id_}...')
@@ -349,7 +328,6 @@ class ZkBridge(Help):
                         enco = f'0x000000000000000000000000{self.address[2:]}'
                         nonce = await self.w3.eth.get_transaction_count(self.address)
                         await asyncio.sleep(2)
-                        logger.info("Tx on non Pandra")
                         tx = await bridge.functions.transferNFT(
                             Web3.to_checksum_address(self.nft_address), id_, to_chain,
                                 enco).build_transaction({
@@ -362,17 +340,8 @@ class ZkBridge(Help):
                                 'maxFeePerGas': int(await self.w3.eth.gas_price),
                                 'maxPriorityFeePerGas': int((await self.w3.eth.gas_price) * 0.8)
                         })
-                        logger.info("Tx is builded 2")
 
-                    if self.chain == Chain.BSC:
-                        del tx['maxFeePerGas']
-                        del tx['maxPriorityFeePerGas']
-                        tx['gasPrice'] = self.w3.to_wei(1, 'gwei')
-                    if self.chain == Chain.CORE:
-                        del tx['maxFeePerGas']
-                        del tx['maxPriorityFeePerGas']
-                        tx['gasPrice'] = await self.w3.eth.gas_price
-
+                    tx = Help.set_gas_price_for_bsc_or_core(tx)
                     scan = DATA[self.chain]['scan']
 
                     sign = self.account.sign_transaction(tx)
