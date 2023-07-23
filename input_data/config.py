@@ -10,7 +10,7 @@ GREENFIELD_MINT_CHAIN = Chain.BSC
 OP_BNB_BRIDGE_CHAIN = Chain.BSC, Chain.OP_BNB
 PANDRA_CODECONQUEROR_BRIDGE = Chain.BSC, Chain.CORE
 PANDRA_PIXELBROWLER_BRIDGE = Chain.POLYGON, Chain.CORE
-PANDRA_MELODYMAVEN_BRIDGE = Chain.BSC, Chain.POLYGON
+PANDRA_MELODYMAVEN_BRIDGE = Chain.CORE, Chain.POLYGON
 PANDRA_ECOGUARDIAN_BRIDGE = Chain.CELO, Chain.POLYGON
 MAINNET_ALPHA_NFT_CORE_BRIDGE = Chain.CORE, Chain.POLYGON
 BSC_POLYGON_ZKMESSENGER = Chain.BSC, Chain.ARBITRUM_NOVA
@@ -25,7 +25,7 @@ WALLETS_IN_BATCH = 5
 
 # start_delay отвечает за начальную задержку между кошельками, нужна для одновременного запуска несколька кошелей, смотри wallets_in_batch выше
 # рекомендую не менять для максимального рандома
-START_DELAY = (1, 100)
+START_DELAY = (1, 20)
 
 # перерыв между действиями
 DELAY = (1, 100)

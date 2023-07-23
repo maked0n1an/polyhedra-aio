@@ -15,6 +15,7 @@ class Chain(Enum):
     GNOSIS = 100
     HARMONY = 1666600000
     KLAYTN = 8217
+    METIS = 1088
     MOONBEAM = 1284
     MOONRIVER = 1285
     OP_BNB = 5611

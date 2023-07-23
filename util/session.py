@@ -1,21 +1,13 @@
-from enum import Enum
 import requests
+
+from enum import Enum
 from web3 import Web3
+from util.chain import Chain
 
 
-class Rpc(Enum):
-    BSC = (1,)
-    ARBITRUM = (2,)
-    POLYGON = (3,)
-    AVAX = (4,)
-    GNOSIS = (5,)
-    OPTIMISM = (6,)
-    CELO = (7,)
-    KLAYTN = 8
-    DFK = 9
-
+class Session:
     @staticmethod
-    def get_web3_session(proxy: str):
+    def get_web3_session_via_proxy(proxy: str):
         session = requests.Session()
         session.proxies = {"socks5": proxy, "http": proxy, "https": proxy}
         session.proxies.update(requests.utils.getproxies())

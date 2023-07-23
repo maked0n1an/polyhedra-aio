@@ -14,14 +14,14 @@ from modules.zk_message import ZkMessage
 from input_data.config import *
 from util.activity import Activity
 from util.data import *
-from util.rpc import Rpc
+from util.session import Session
 from util.chain import Chain
 from util.file_readers import *
-from util.activities import *
+from util.operations import *
 
 
 async def run_wallet(private_key, proxy, i):
-    session = Rpc.get_web3_session(proxy)
+    session = Session.get_web3_session_via_proxy(proxy)
     web3 = Web3(provider=Web3.HTTPProvider(DATA[Chain.BSC]['rpc'], session=session))
     only_ip_proxy = proxy.split('@')[1]
 
@@ -29,30 +29,49 @@ async def run_wallet(private_key, proxy, i):
     logger.success(f"Current proxy  ({i}/{len(PROXIES)}): {only_ip_proxy}")
     logger.success(f"Current wallet ({i}/{len(PRIVATE_KEYS)}): {address}")
 
-    activities = [
+    activities_list = [
         Activity.GREENFIELD_TESTNET_MINT,
         Activity.OP_BNB_MINT_OPERATIONS,
-        # Activity.PANDRA_CODECONQUEROR_OPERATIONS,
-        # Activity.PANDRA_PIXELBROWLER_OPERATIONS,
-        # Activity.PANDRA_MELODYMAVEN_OPERATIONS,
-        # Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
+        Activity.PANDRA_CODECONQUEROR_OPERATIONS,
+        Activity.PANDRA_PIXELBROWLER_OPERATIONS,
+        Activity.PANDRA_MELODYMAVEN_OPERATIONS,
+        Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
         # Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
         # Activity.BSC_POLYGON_ZKMESSENGER,
         # Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
         # Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS
     ]
-    random.shuffle(activities)
+    random.shuffle(activities_list)
 
-    for activity in activities:
+    for activity in activities_list:
+        logger.info(activity.name)
         await run_activity(activity, private_key, proxy, address)
 
 async def run_activity(activity: Activity, private_key, proxy, address):
+    i = 0
+
     if activity == Activity.GREENFIELD_TESTNET_MINT:
-        logger.info(f"{address}: Launched Greenfield NFT mint")
+        logger.info(f"{address}: Запущен минт Greenfield NFT")
         await do_greenfield_mint_nft(private_key=private_key, proxy=proxy)    
-    elif activity == Activity.OP_BNB_MINT_OPERATIONS:
-        logger.info(f"{address}: Launched opBNB NFT mint and bridge")
+    if activity == Activity.OP_BNB_MINT_OPERATIONS:
+        logger.info(f"{address}: Запущен минт и бридж opBNB NFT")
         await do_op_bnb_operations(private_key=private_key, proxy=proxy)
+    if activity == Activity.PANDRA_CODECONQUEROR_OPERATIONS:
+        i += 1
+        logger.info(f"{address}: Запущен минт и бридж Pandra CodeConqueror ({i}/4 из Pandra'с)")
+        await do_pandra_codeconquer_operations(private_key=private_key, proxy=proxy)
+    if activity == Activity.PANDRA_PIXELBROWLER_OPERATIONS:
+        i += 1
+        logger.info(f"{address}: Запущен минт и бридж Pandra PixelBowler ({i}/4 из Pandra'с)")
+        await do_pandra_pixelbowler_operations(private_key=private_key, proxy=proxy)
+    if activity == Activity.PANDRA_MELODYMAVEN_OPERATIONS:
+        i += 1
+        logger.info(f"{address}: Запущен минт и бридж Pandra MelodyMaven ({i}/4 из Pandra'с)")
+        await do_pandra_melodymaven_operations(private_key=private_key, proxy=proxy)
+    if activity == Activity.PANDRA_ECOGUARDIAN_OPERATIONS:
+        i += 1
+        logger.info(f"{address}: Запущен минт и бридж Pandra EcoGuardian ({i}/4 из Pandra'с)")
+        await do_pandra_ecoguardian_operations(private_key=private_key, proxy=proxy)
 
 async def main():
     if len(PRIVATE_KEYS) == 0:

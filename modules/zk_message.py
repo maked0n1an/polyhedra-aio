@@ -13,7 +13,7 @@ from moralis import evm_api
 
 from input_data.config import *
 from modules.help import Help
-from util.data import DATA
+from util.data import *
 from util.chain import Chain
 
 
