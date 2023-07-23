@@ -16,16 +16,15 @@ stargate_ids = {'bsc': 102,
                 'core': 153
                 }
 
-chain_ids = {'bsc': 3,
-             'polygon': 4,
-             'ftm': 6,
-             'core': 17,
-             'mbeam': 9,
-             'nova': 14,
-             'opbnb': 116,
-             'combo': 114,
-             'celo': 18,
-             'op_bnb': 5611
+chain_ids = {Chain.BSC: 3,
+             Chain.POLYGON: 4,
+             Chain.FANTOM: 6,
+             Chain.CORE: 17,
+             Chain.MOONBEAM: 9,
+             Chain.ARBITRUM_NOVA: 14,
+             Chain.OP_BNB: 116,
+             Chain.COMBO: 114,
+             Chain.CELO: 18
              }
 
 ids = {'bsc': 56,
@@ -33,13 +32,7 @@ ids = {'bsc': 56,
        'core': 1116,
        'opbnb': 5611,
        'ftm': 6}
-
-scans = {'bsc': 'https://bscscan.com/tx/',
-         'polygon': 'https://polygonscan.com/tx/',
-         'core': 'https://scan.coredao.org/tx/',
-         'opbnb': 'https://opbnbscan.com/tx/',
-         'celo': 'https://celoscan.io/tx/'}
-
+       
 dst_addresses = {'bsc': '0xA98163227B85CcC765295Ce5C18E8aAD663De147',
                  'polygon': '0xCcE1E39f2Ef1e69E6B61Cf79212E96C92C4aFf9a',
                  'ftm': '0xfCF250b621872aceB9C0BB78AACe1F1cFc5820b1',
@@ -53,15 +46,15 @@ lzdst_addresses = {'bsc': '0x39dad2E89a213626a99Ae09b808b4A79c0d3EC16',
                    'nova': '0x2dED59F685f18ee016a93d1CeCc5b7eA0322aFED',
                    'mbeam': '0xe6eb0b3A1b0c542aCCB40a86565786Fcf8a42EF0'}
 
-nft_bridge_addresses = {'bsc': '0xE09828f0DA805523878Be66EA2a70240d312001e',
-                        'polygon': '0x2E953a70C37E8CB4553DAe1F5760128237c8820D',
-                        'core': '0x5c5979832a60c17bb06676fa906bedd1a013e18c',
-                        'celo': '0x24339b7f8d303527C8681382AbD4Ec299757aF63'}
+nft_bridge_addresses = {Chain.BSC: '0xE09828f0DA805523878Be66EA2a70240d312001e',
+                        Chain.POLYGON: '0x2E953a70C37E8CB4553DAe1F5760128237c8820D',
+                        Chain.CORE: '0x5c5979832a60c17bb06676fa906bedd1a013e18c',
+                        Chain.CELO: '0x24339b7f8d303527C8681382AbD4Ec299757aF63'}
 
-nft_lz_bridge_addresses = {'bsc': '0x3668c325501322CEB5a624E95b9E16A019cDEBe8',
-                           'polygon': '0xffdf4fe05899c4bdb1676e958fa9f21c19ecb9d5',
-                           'core': '0x3701c5897710f16f1f75c6eae258bf11ee189a5d',
-                           'celo': '0xe47b0a5F2444F9B360Bd18b744B8D511CfBF98c6'}
+nft_lz_bridge_addresses = {Chain.BSC: '0x3668c325501322CEB5a624E95b9E16A019cDEBe8',
+                           Chain.POLYGON: '0xffdf4fe05899c4bdb1676e958fa9f21c19ecb9d5',
+                           Chain.CORE: '0x3701c5897710f16f1f75c6eae258bf11ee189a5d',
+                           Chain.CELO: '0xe47b0a5F2444F9B360Bd18b744B8D511CfBF98c6'}
 
 nft_claim_addresses = {'bsc': '0xe9AD444cF80E1d6Ba062A2Dd6f53b740b5F0aa14',
                        'polygon': '0xa25bE50be65070c2Ad96d5eD639061de31c45e12',

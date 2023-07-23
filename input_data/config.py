@@ -1,3 +1,22 @@
+from util.chain import Chain
+
+MINT_GREENFIELD_CHAIN = Chain.BSC
+OP_BNB_MINT = Chain.BSC # DATA['bsc'] 
+OP_BNB_BRIDGE = Chain.BSC, Chain.OP_BNB #'bsc', 'op_bnb'
+# PANDRA_CODECONQUEROR_MINT = DATA['bsc']
+# PANDRA_CODECONQUEROR_BRIDGE = DATA['bsc'], DATA['core']
+# PANDRA_PIXELBROWLER_MINT = DATA['polygon']
+# PANDRA_PIXELBROWLER_BRIDGE = DATA['polygon'], DATA['core']
+# PANDRA_MELODYMAVEN_MINT = DATA['core']
+# PANDRA_MELODYMAVEN_BRIDGE= DATA['core'], DATA['polygon']
+# PANDRA_ECOGUARDIAN_MINT = DATA['celo']
+# PANDRA_ECOGUARDIAN_BRIDGE= DATA['celo'], DATA['polygon']
+# MAINNET_ALPHA_NFT_CORE_MINT= DATA['core']
+# MAINNET_ALPHA_NFT_CORE_BRIDGE_BRIDGE = DATA['core'], DATA['polygon'] 
+# BSC_POLYGON_ZKMESSENGER = DATA['bsc'], DATA['arbitrum_nova'] 
+# ZK_LIGHT_CLIENT_NFT_MINT = DATA['bsc']
+# ZK_LIGHT_CLIENT_NFT_BRIDGE = DATA['bsc'], DATA['polygon']
+
 # rpc по желанию можно поменять(рекомендуется при большом количестве кошельков)
 rpcs = {'bsc': 'https://rpc.ankr.com/bsc',
         'polygon': 'https://polygon-rpc.com',
@@ -61,4 +80,3 @@ to = ''
 # выбор нфт для минта и бриджа
 # список нфт 'greenfield' 'zkLightClient' 'Mainnet Alpha' 'Luban' 'ZkBridge on opBNB', 'Pandra'
 nft = ''
-

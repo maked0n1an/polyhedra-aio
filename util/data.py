@@ -1,5 +1,6 @@
 from util.chain import Chain
 
+
 # меняем рпс на свои
 DATA = {    
     Chain.ARBITRUM                  : {'rpc': 'https://rpc.ankr.com/arbitrum', 'scan': 'https://arbiscan.io/tx/', 'token': 'ETH', 'chain_id': 42161},    

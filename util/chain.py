@@ -1,11 +1,13 @@
 from enum import Enum
 
+
 class Chain(Enum):
     ARBITRUM = 42161
     ARBITRUM_NOVA = 42170 
     AVALANCHE = 43114
     BSC = 56
     CELO = 42220
+    COMBO = 110000
     CORE = 1116
     DFK = 53935
     ETH = 1

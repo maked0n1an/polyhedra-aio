@@ -10,32 +10,23 @@ from loguru import logger
 
 from modules.zk_bridge import ZkBridge
 from modules.zk_message import ZkMessage
-from input_data.setup_chains import *
+from input_data.config import *
 from util.activity import Activity
 from util.data import DATA
 from util.rpcs import Rpc
 from util.chain import Chain
 from util.file_readers import *
-from config import *
+from util.activities import *
 from info import nfts_addresses
 
-def run_wallet(private_key, proxy, i):
+
+async def run_wallet(private_key, proxy, i):
     web3 = Rpc.getWeb3(proxy, Rpc.BSC)
     only_ip_proxy = proxy.split('@')[1]
 
     address = web3.eth.account.from_key(private_key).address
     logger.success(f"Current proxy  ({i}/{len(PROXIES)}): {only_ip_proxy}")
     logger.success(f"Current wallet ({i}/{len(PRIVATE_KEYS)}): {address}")
-
-    # if web3.is_connected() == True:
-    #     address = web3.eth.account.from_key(private_key).address
-    #     logger.success(f"Current proxy  ({i}/{len(PROXIES)}): {only_ip_proxy}")
-    #     logger.success(f"Current wallet ({i}/{len(PRIVATE_KEYS)}): {address}")
-    # else:
-    #     logger.error(
-    #         f"Connection error"
-    #     )
-    #     return False
 
     activities = [
         # Activity.GREENFIELD_TESTNET_MINT,
@@ -52,100 +43,41 @@ def run_wallet(private_key, proxy, i):
     random.shuffle(activities)
 
     for activity in activities:
-        run_activity(activity, private_key, proxy, address)
+        await run_activity(activity, private_key, proxy, address)
 
-def run_activity(activity: Activity, private_key, proxy, address):
-    if activity == Activity.GREENFIELD_TESTNET_MINT:
-        logger.info(f'{address}: Запущен Greenfield NFT mint...')
-        zk = ZkBridge(private_key, DELAY, MORALIS_API_KEY, proxy)        
-        tasks.append(zk.mint())
-    elif activity == Activity.OP_BNB_MINT_OPERATIONS:
-        logger.info(f"{address}: Запущен opBNB NFT mint and bridge")
-        zk = ZkBridge(privatekey=private_key, 
-            delay=DELAY, 
-            chain=Chain.BSC, 
-            to_chain=OP_BNB_BRIDGE[1], 
-            api=MORALIS_API_KEY, 
-            nft='ZkBridge on opBNB',
-            proxy=proxy)        
-        asyncio.run(zk.mint())
-    elif activity == Activity.BTCB:
-        logger.info(f"{address}: btcb")
-        if ENABLE_EXPENSIVE_ACTIVITIES == 1 or (
-            ENABLE_EXPENSIVE_ACTIVITIES == 2 and is_activity_active_by_chance()
-        ):
-            pass
-        else:
-            logger.info(f"Activity btcb was skipped for address {address}")
-    elif activity == Activity.COREDAO:
-        logger.info(f"{address} coredao")
-        pass
-    elif activity == Activity.DEFI_KINGDOMS:
-        logger.info(f"{address} defi kingdoms")
-        run_dfk(private_key, proxy)
-        short_delay(address, "Waiting after DFK")
-    elif activity == Activity.HARMONY:
-        logger.info(f"{address} harmony")
-        run_harmony(private_key, proxy)
-    elif activity == Activity.STARGATE:
-        logger.info(f"{address} stargate")
-        if ENABLE_EXPENSIVE_ACTIVITIES == 1 or (
-            ENABLE_EXPENSIVE_ACTIVITIES == 2 and is_activity_active_by_chance()
-        ):
-            pass
-        else:
-            logger.info(f"Activity stargate was skipped for address {address}")
-    elif activity == Activity.TESTNET:
-        logger.info(f"{address} testnet")
-        if ENABLE_EXPENSIVE_ACTIVITIES == 1 or (
-            ENABLE_EXPENSIVE_ACTIVITIES == 2 and is_activity_active_by_chance()
-        ):
-            pass
-        else:
-            logger.info(f"Activity testnet bridge was skipped for address {address}")
-    elif activity == Activity.REFUEL:
-        logger.info(f"{address} refuel")
-        run_bungee(private_key, proxy, "AVALANCHE", random.uniform(0.0065, 0.0085))
-        run_bungee(private_key, proxy, "GNOSIS", random.uniform(0.0065, 0.0085))
-        short_delay(address, "Waiting after bungee refuel")
-    
-    elif activity == Activity.MINT_NFT:
-        value = random.random()
-        if value < 1/3:
-            logger.info(f"{address} Minting Greenfield NFT")
-            mint_greenfield(private_key, proxy)
-        elif value < 2/3:
-            logger.info(f"{address} Minting Luban NFT")
-            mint_luban(private_key, proxy)
-        else:
-            logger.info(f"{address} Minting Polygon NFT")
-            mint_polygon(private_key, proxy)
+async def run_activity(activity: Activity, private_key, proxy, address):
+    if activity == Activity.OP_BNB_MINT_OPERATIONS:
+        await do_op_bnb_operations(private_key=private_key, proxy=proxy, address=address)
 
 async def main():
+    if len(PRIVATE_KEYS) == 0:
+        logger.error("Don't imported private keys in private_keys.txt!...")
+        return
+    if shuffle_keys:
+        random.shuffle(PRIVATE_KEYS)
+    if MORALIS_API_KEY == '':
+        logger.error('Не вставлен апи ключ моралис!...')
+        return
+
     logger.info('The bot has been started')
+
     key_proxy_pairs = zip(PRIVATE_KEYS, PROXIES * len(PRIVATE_KEYS))
-    
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
-            for i, (private_key, proxy) in enumerate(key_proxy_pairs, 0):
-                i += 1
-                futures.append(executor.submit(run_wallet, private_key, proxy, i))
+    tasks = []
 
-            concurrent.futures.wait(futures) 
+    for i, (private_key, proxy) in enumerate(key_proxy_pairs, 1):
+        tasks.append(asyncio.create_task(run_wallet(private_key, proxy, i)))
 
-    # for i, (private_key, proxy) in enumerate(key_proxy_pairs, 1):
-    #     run_wallet(private_key=private_key, proxy=proxy, i=i)
-    
+    res = await asyncio.gather(*tasks)
+
     logger.info("The bot has ended its work")
 
     # with concurrent.futures.ThreadPoolExecutor() as executor:
     #     key_proxy_pairs = data
     #     futures = []
     #     i = 0
-    #     for private_key, proxy in key_proxy_pairs.items():
-    #         i += 1
-    #         futures.append(executor.submit(run_wallet, private_key, proxy, i))
-
+    #     
+        # for i, (private_key, proxy) in enumerate(key_proxy_pairs, 1):
+        #     run_wallet(private_key=private_key, proxy=proxy, i=i)
     #     concurrent.futures.wait(futures)    
 
     # logger.success(f'Успешно сделал {len(keys)} кошельков...')
