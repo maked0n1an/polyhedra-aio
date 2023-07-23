@@ -3,9 +3,11 @@
 <h2>О боте</h2>
 Бот для минта&бриджа нфт и отправки сообщений через https://zkbridge.com/</br>
 
-* Приватные кошельки пишем в private_keys.txt - один ключ на одной строке </br>
+* Приватные кошельки пишем в private_keys.txt - один ключ на одной строке.
+Если нет файла - создайте его в папке 'input_data'</br>
 
-* Прокси в proxies.txt - один прокси на одной строке  в формате protocol://login:pass@ip:port</br>
+* Прокси в proxies.txt - один прокси на одной строке в формате protocol://login:pass@ip:port.
+Если нет файла - создайте его в папке 'input_data'</br>
 
 * protocol://login:pass@ip:port</br>
 
