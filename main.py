@@ -30,12 +30,12 @@ async def run_wallet(private_key, proxy, i):
     logger.success(f"Current wallet ({i}/{len(PRIVATE_KEYS)}): {address}")
 
     activities_list = [
-        Activity.GREENFIELD_TESTNET_MINT,
-        Activity.OP_BNB_MINT_OPERATIONS,
-        Activity.PANDRA_CODECONQUEROR_OPERATIONS,
+        # Activity.GREENFIELD_TESTNET_MINT,
+        # Activity.OP_BNB_MINT_OPERATIONS,
+        # Activity.PANDRA_CODECONQUEROR_OPERATIONS,
         Activity.PANDRA_PIXELBROWLER_OPERATIONS,
-        Activity.PANDRA_MELODYMAVEN_OPERATIONS,
-        Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
+        # Activity.PANDRA_MELODYMAVEN_OPERATIONS,
+        # Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
         # Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
         # Activity.BSC_POLYGON_ZKMESSENGER,
         # Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
@@ -44,7 +44,6 @@ async def run_wallet(private_key, proxy, i):
     random.shuffle(activities_list)
 
     for activity in activities_list:
-        logger.info(activity.name)
         await run_activity(activity, private_key, proxy, address)
 
 async def run_activity(activity: Activity, private_key, proxy, address):
@@ -102,8 +101,8 @@ if __name__ == "__main__":
     authors = ["@1liochka1", "@maked0n1an"]
     random.shuffle(authors)
     art = text2art(text="DropBot", font="standart")
-    print(colored(art, "light_blue"))
-    print(colored(f"Authors: {authors[0]}, {authors[1]}\n", "light_cyan"))
+    print(colored(art, "cyan"))
+    print(colored(f"Authors: {authors[0]}, {authors[1]}\n", "cyan"))
     logger.remove()
     logger.add(
         sys.stderr,
