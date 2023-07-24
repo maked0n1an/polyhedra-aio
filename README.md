@@ -24,8 +24,5 @@
 2. Отправка сообщений
 3. Рандомизация всех действий
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
-
 <h2>Донат</h2> 0x74eEfCAD1Ad18705596106703A3036BaAD6B3145
 <h2>Telegram</h2><a href="https://t.me/maked0n1an" target="_blank">@maked0n1an</a>
-
