@@ -9,7 +9,7 @@
 * Прокси в proxies.txt - один прокси на одной строке в формате protocol://login:pass@ip:port.
 Если нет файла - создайте его в папке 'input_data'</br>
 
-* Формат прокси: protocol://login:pass@ip:port</br>
+* Формат прокси: Формат прокси: protocol://login:pass@ip:port</br>
 
 * Необходим апи ключ моралис - https://admin.moralis.io/settings#secret-keys
  </br>
