@@ -60,3 +60,12 @@ async def do_pandra_ecoguardian_operations(private_key, proxy):
         proxy=proxy)
     
     await zk.bridge_nft()
+
+async def do_alpha_nft_core_dao_operations(private_key, proxy):
+    zk = ZkBridge(private_key=private_key,
+        chain=MAINNET_ALPHA_NFT_CORE_BRIDGE[0],
+        to_chain=MAINNET_ALPHA_NFT_CORE_BRIDGE[1],
+        nft='Mainnet Alpha',
+        proxy=proxy)
+    
+    await zk.bridge_nft()

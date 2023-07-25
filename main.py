@@ -33,7 +33,7 @@ async def run_wallet(private_key, proxy, i):
         # Activity.GREENFIELD_TESTNET_MINT,
         # Activity.OP_BNB_MINT_OPERATIONS,
         # Activity.PANDRA_CODECONQUEROR_OPERATIONS,
-        Activity.PANDRA_PIXELBROWLER_OPERATIONS,
+        # Activity.PANDRA_PIXELBROWLER_OPERATIONS,
         # Activity.PANDRA_MELODYMAVEN_OPERATIONS,
         # Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
         # Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
@@ -42,6 +42,8 @@ async def run_wallet(private_key, proxy, i):
         # Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS
     ]
     random.shuffle(activities_list)
+
+    i = 0
 
     for activity in activities_list:
         await run_activity(activity, private_key, proxy, address)
@@ -71,6 +73,11 @@ async def run_activity(activity: Activity, private_key, proxy, address):
         i += 1
         logger.info(f"{address}: Запущен минт и бридж Pandra EcoGuardian ({i}/4 из Pandra'с)")
         await do_pandra_ecoguardian_operations(private_key=private_key, proxy=proxy)
+    if activity == Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS:
+        logger.info(f"{address}: Запщуен минт и бридж Alpha NFT Core DAO")
+        await do_alpha_nft_core_dao_operations(private_key=private_key, proxy=proxy)
+    
+    return i
 
 async def main():
     if len(PRIVATE_KEYS) == 0:
@@ -79,11 +86,11 @@ async def main():
     if len(PROXIES) == 0:
         logger.error("Don't imported proxies in 'proxies.txt'!")
         return
-    if shuffle_keys:
-        random.shuffle(PRIVATE_KEYS)
     if MORALIS_API_KEY == '':
         logger.error("Don't imported Moralis API key!...")
         return
+    if shuffle_keys:
+        random.shuffle(PRIVATE_KEYS)
 
     logger.info('The bot has been started')
 

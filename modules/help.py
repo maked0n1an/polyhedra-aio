@@ -7,11 +7,11 @@ from util.chain import Chain
 
 
 class Help:
-    async def check_status_tx(self, tx_hash, chain_name):
+    async def check_status_tx(self, tx_hash, chain):
         scan = DATA[self.chain]['scan']
 
         logger.info(
-            f'{self.address}:{chain_name} - жду подтверждения транзакции {scan}{self.w3.to_hex(tx_hash)}...')
+            f'{self.address}:{self.chain} - жду подтверждения транзакции {scan}{self.w3.to_hex(tx_hash)}...')
 
         start_time = int(time.time())
         while True:
@@ -28,8 +28,8 @@ class Help:
             except Exception as error:
                 await asyncio.sleep(1)
 
-    async def sleep_indicator(self, secs, chain_name):
-        logger.info(f'{self.address}:{chain_name} - жду {secs} секунд...')
+    async def sleep_indicator(self, secs, chain):
+        logger.info(f'{self.address}:{self.chain} - жду {secs} секунд...')
         await asyncio.sleep(secs)
 
     async def set_gas_price_for_bsc_or_core(self, tx):

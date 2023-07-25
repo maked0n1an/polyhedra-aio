@@ -1,25 +1,25 @@
 from enum import Enum
 
 
-class Chain(Enum):
-    ARBITRUM = 42161
-    ARBITRUM_NOVA = 42170 
-    AVALANCHE = 43114
-    BSC = 56
-    CELO = 42220
-    COMBO = 110000
-    CORE = 1116
-    DFK = 53935
-    ETH = 1
-    FANTOM = 250
-    GNOSIS = 100
-    HARMONY = 1666600000
-    KLAYTN = 8217
-    METIS = 1088
-    MOONBEAM = 1284
-    MOONRIVER = 1285
-    OP_BNB = 5611
-    OPTIMISM = 10
-    POLYGON = 137
-    POLYGON_ZKEVM = 1101
-    ZK_SYNC = 324
+class Chain():
+    ARBITRUM = 'arbitrum'
+    ARBITRUM_NOVA = 'arbitrum_nova'
+    AVALANCHE = 'avalanche'
+    BSC = 'bsc'
+    CELO = 'celo'
+    COMBO = 'combo'
+    CORE = 'core'
+    DFK = 'dfk'
+    ETH = 'eth'
+    FANTOM = 'fantom'
+    GNOSIS = 'gnosis'
+    HARMONY = 'harmony'
+    KLAYTN = 'klaytn'
+    METIS = 'metis'
+    MOONBEAM = 'moonbeam'
+    MOONRIVER = 'moonriver'
+    OP_BNB = 'op_bnb'
+    OPTIMISM = 'optimism'
+    POLYGON = 'polygon'
+    POLYGON_ZKEVM = 'polygon_zkevm'
+    ZK_SYNC = 'zk_sync'
