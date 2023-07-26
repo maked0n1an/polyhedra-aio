@@ -5,6 +5,10 @@ from util.chain import Chain
     Пример: [activity = (from_chain, to_chain)]
     Внимание: если вам нужен минт, то просто оставляйте второе значение как None
     Пример: [MAINNET_ALPHA_NFT_CORE_MINT = Chain.BSC, None]
+
+    Прокси - по желанию, но рекомендую при большом количестве кошельков,
+    нужно вставить в формате  protocol//:log:pass@ip:port 
+    в файле proxies.txt
 '''
 GREENFIELD_MINT_CHAIN = Chain.BSC
 OP_BNB_BRIDGE_CHAIN = Chain.BSC, Chain.OP_BNB
@@ -14,10 +18,11 @@ PANDRA_MELODYMAVEN_BRIDGE = Chain.CORE, Chain.POLYGON
 PANDRA_ECOGUARDIAN_BRIDGE = Chain.CELO, Chain.POLYGON
 MAINNET_ALPHA_NFT_CORE_BRIDGE = Chain.CORE, Chain.POLYGON
 BSC_POLYGON_ZKMESSENGER = Chain.BSC, Chain.ARBITRUM_NOVA
+BNB_CHAIN_LUBAN_NFT_BRIDGE = Chain.BSC, Chain.ARBITRUM_NOVA
 ZK_LIGHT_CLIENT_NFT_BRIDGE = Chain.BSC, Chain.POLYGON
 
 # Нужно ли мешать кошельки? | Да - 1, Нет - 0
-shuffle_keys = 1
+shuffle_keys = 0
 
 # Количество кошельков для одновременного запуска, т.е если у вас 100 кошельков, и вы выбрали число 5,
 # то скрипт поделит ваши кошельки на 20 частей по 5 кошельков которые будут запущены одновременно
@@ -25,7 +30,7 @@ WALLETS_IN_BATCH = 5
 
 # start_delay отвечает за начальную задержку между кошельками, нужна для одновременного запуска несколька кошелей, смотри wallets_in_batch выше
 # рекомендую не менять для максимального рандома
-START_DELAY = (1, 40)
+INITIAL_DELAY = (100, 500)
 
 # перерыв между действиями
 DELAY = (1, 100)

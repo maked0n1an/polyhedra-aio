@@ -11,4 +11,5 @@ class Activity(Enum):
     PANDRA_ECOGUARDIAN_OPERATIONS           = 6     # Mint and bridge a “EcoGuardian” NFT from Celo to BNB, Polygon or Combo.
     MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS   = 7     # Mint and bridge
     BSC_POLYGON_ZKMESSENGER                 = 8     # Send a cross-chain message using Greenfield zkMessenger on https://zkbridge.com/messenger before August 1st, 2023.
-    ZK_LIGHT_CLIENT_NFT_OPERATIONS          = 9     # Mint and bridge
+    BNB_CHAIN_LUBAN_NFT_OPERATIONS          = 9     # BNB Luban NFT mint and bridge before August 1st, 2023.
+    ZK_LIGHT_CLIENT_NFT_OPERATIONS          = 10    # Mint and bridge
