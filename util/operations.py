@@ -69,3 +69,24 @@ async def do_alpha_nft_core_dao_operations(private_key, proxy):
         proxy=proxy)
     
     await zk.bridge_nft()
+
+async def do_messenger(private_key, proxy):
+    pass
+
+async def do_bnb_luban_operations(private_key, proxy):
+    zk = ZkBridge(private_key=private_key,
+        chain=BNB_CHAIN_LUBAN_NFT_BRIDGE[0],
+        to_chain=BNB_CHAIN_LUBAN_NFT_BRIDGE[1],
+        nft='Luban',
+        proxy=proxy)
+
+    await zk.bridge_nft()
+
+async def do_zk_light_client_operations(private_key, proxy):
+    zk = ZkBridge(private_key=private_key,
+        chain=ZK_LIGHT_CLIENT_NFT_BRIDGE[0],
+        to_chain=ZK_LIGHT_CLIENT_NFT_BRIDGE[1],
+        nft='zkLightClient',
+        proxy=proxy)
+
+    await zk.bridge_nft()
