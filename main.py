@@ -9,17 +9,17 @@ from art import text2art
 from loguru import logger
 from web3 import Web3
 
-from modules.zk_bridge import ZkBridge
-from modules.zk_message import ZkMessage
 from input_data.config import *
 from input_data.activities_list import *
+from modules.zk_bridge import ZkBridge
+from modules.zk_message import ZkMessage
+from modules.help import Help
 from util.activity import Activity
 from util.data import *
 from util.session import Session
 from util.chain import Chain
 from util.file_readers import *
 from util.operations import *
-from util.delays import *
 
 async def run_wallet(private_key, proxy, activities_list_item, i):
     session = Session.get_web3_session_via_proxy(proxy)
@@ -29,7 +29,7 @@ async def run_wallet(private_key, proxy, activities_list_item, i):
     address = web3.eth.account.from_key(private_key).address
     logger.success(f"Current proxy  ({i}/{len(PROXIES)}): {only_ip_proxy}")
     logger.success(f"Current wallet ({i}/{len(PRIVATE_KEYS)}): {address}")
-    await sleep_initial_indicator(address)
+    await Help.sleep_initial_indicator(address)
     
     random.shuffle(activities_list_item)
 

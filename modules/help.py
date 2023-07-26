@@ -28,6 +28,11 @@ class Help:
             except Exception as error:
                 await asyncio.sleep(1)
 
+    async def sleep_initial_indicator(address):
+        secs = random.randint(INITIAL_DELAY[0], INITIAL_DELAY[1])
+        logger.info(f'{address}: - пауза в виде {secs} секунд...')
+        await asyncio.sleep(secs)
+
     async def sleep_indicator(self, secs, chain):
         logger.info(f'{self.address}:{self.chain} - жду {secs} секунд...')
         await asyncio.sleep(secs)
