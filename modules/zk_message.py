@@ -18,7 +18,7 @@ from util.chain import Chain
 
 
 class ZkMessage(Help):
-    def __init__(self, private_key, chain: Chain, to_chain, delay, proxy=None):
+    def __init__(self, private_key, chain: Chain, to_chain: Chain, delay, proxy=None):
         self.privatekey = private_key
         self.chain = chain
         self.to_chain = random.choice(to_chain) if type(to_chain) == list else to_chain
@@ -200,7 +200,7 @@ class ZkMessage(Help):
         dst_address = Web3.to_checksum_address(dst_addresses[self.to_chain])
         lzdst_address = Web3.to_checksum_address(lzdst_addresses[self.to_chain])
         mailer = self.w3.eth.contract(address=contract_msg, abi=mailer_abi)
-        native_ = native[self.chain]
+        native_ = DATA[self.chain]
 
         while True:
             try:

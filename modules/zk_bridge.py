@@ -27,7 +27,7 @@ class ZkBridge(Help):
         self.account = self.w3.eth.account.from_key(self.private_key)
         self.address = self.account.address
         self.nft = random.choice(nft) if type(nft) == list else nft
-        self.delay = START_DELAY
+        self.delay = DELAY
         self.moralisapi = MORALIS_API_KEY
         self.proxy = proxy or None
         self.nft_address = nfts_addresses[self.nft][self.chain]
