@@ -37,7 +37,7 @@ class ZkMessage(Help):
         logger = global_logger.bind()
         logger.remove()
         logger.add(
-            f"log_wallet/log_{name}.log",
+            f"logs/log_{name}.log",
             format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
             "{level: <8}</level> | <cyan>"
             "</cyan> <white>{message}</white>",
