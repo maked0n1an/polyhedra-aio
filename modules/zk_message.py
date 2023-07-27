@@ -241,7 +241,7 @@ class ZkMessage(Help):
                     msg = await self.msg(headers, contract_msg, message, from_chain_id, to_chain_id,
                                          self.w3.to_hex(hash_))
                     if msg:
-                        await self.sleep_indicator(random.randint(self.delay[0], self.delay[1]))
+                        await self.sleep_indicator(5, self.chain)
                         return self.privatekey, self.address, f'success sending message to {self.to_chain}'
                 else:
                     logger.info(f'{self.address}:{self.chain} - пробую еще раз отправлять сообщение...')

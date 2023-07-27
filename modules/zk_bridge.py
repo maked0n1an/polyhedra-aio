@@ -198,7 +198,7 @@ class ZkBridge(Help):
                 if status == 1:
                     logger.success(
                         f'{self.address}:{self.chain} - успешно заминтил "{self.nft}" : {scan}{self.w3.to_hex(hash)}...')
-                    await self.sleep_indicator(random.randint(self.delay[0], self.delay[1]), self.chain)
+                    await self.sleep_indicator(5, self.chain)
                     return headers
                 else:
                     logger.info(f'{self.address}:{self.chain} - пробую минт еще раз...')
@@ -274,7 +274,7 @@ class ZkBridge(Help):
                     if status == 1:
                         logger.success(
                             f'{self.address}:{self.chain} - успешно апрувнул "{self.nft}"[{id_}] : {scan}{self.w3.to_hex(hash)}...')
-                        await self.sleep_indicator(random.randint(1, 10), self.chain)
+                        await self.sleep_indicator(5, self.chain)
                         return True
                     else:
                         logger.info(f'{self.address}:{self.chain} - пробую апрув еще раз...')
@@ -345,7 +345,7 @@ class ZkBridge(Help):
                     if status == 1:
                         logger.success(
                             f'{self.address}:{self.chain} - успешно бриджанул "{self.nft}"[{id_}] в {self.to_chain}: {scan}{self.w3.to_hex(hash)}...')
-                        await self.sleep_indicator(random.randint(self.delay[0], self.delay[1]), self.chain)
+                        await self.sleep_indicator(5, self.chain)
                         return self.private_key, self.address, f'successfully bridged "{self.nft}" to {self.to_chain}'
                     else:
                         logger.info(f'{self.address}:{self.chain} - пробую бриджить еще раз...')
