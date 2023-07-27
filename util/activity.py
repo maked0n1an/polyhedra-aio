@@ -4,7 +4,7 @@ from enum import Enum
 class Activity(Enum):
     GREENFIELD_TESTNET_MINT                 = 1     # Mint a Greenfield Testnet Tutorial NFT at https://zkbridge.com/nft-gfd
                                                     # and retweet https://twitter.com/PolyhedraZK/status/1665665972370550785
-    OP_BNB_MINT_OPERATIONS                  = 2     # (Mint a opBNB NFT on zkbridge) and (Transfer your opBNB NFT to opBNB Chain)
+    OP_BNB_OPERATIONS                       = 2     # (Mint a opBNB NFT on zkbridge) and (Transfer your opBNB NFT to opBNB Chain)
     PANDRA_CODECONQUEROR_OPERATIONS         = 3     # Mint and bridge a “CodeConqueror” NFT from BNB to Polygon, Combo, Core DAO or Celo.
     PANDRA_PIXELBROWLER_OPERATIONS          = 4     # Mint and bridge a “PixelProwler” NFT from Polygon to BNB, Combo, Core DAO or Celo.
     PANDRA_MELODYMAVEN_OPERATIONS           = 5     # Mint and bridge a “MelodyMaven” NFT from Core DAO to BNB, Polygon or Combo.
