@@ -71,7 +71,12 @@ async def do_alpha_nft_core_dao_operations(private_key, proxy):
     await zk.bridge_nft()
 
 async def do_messenger(private_key, proxy):
-    pass
+    zk = ZkMessage(private_key=private_key,
+        chain=BSC_POLYGON_ZKMESSENGER[0],
+        to_chain=BSC_POLYGON_ZKMESSENGER[1],
+        proxy=proxy)
+    
+    await zk.send_msg()
 
 async def do_bnb_luban_operations(private_key, proxy):
     zk = ZkBridge(private_key=private_key,
