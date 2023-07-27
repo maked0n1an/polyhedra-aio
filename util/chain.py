@@ -1,6 +1,6 @@
 class Chain():
     ARBITRUM =          'arbitrum'
-    ARBITRUM_NOVA =     'arbitrum_nova'
+    ARBITRUM_NOVA =     'nova'
     AVALANCHE =         'avalanche'
     BSC =               'bsc'
     CELO =              'celo'

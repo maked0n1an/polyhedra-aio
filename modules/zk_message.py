@@ -2,6 +2,7 @@ import json
 import random
 import asyncio
 import aiohttp
+import time
 
 from web3 import Web3
 from fake_useragent import UserAgent
@@ -18,7 +19,7 @@ from util.chain import Chain
 
 
 class ZkMessage(Help):
-    def __init__(self, private_key, chain: Chain, to_chain: Chain, delay, proxy=None):
+    def __init__(self, private_key, chain: str, to_chain: str, proxy=None):
         self.privatekey = private_key
         self.chain = chain
         self.to_chain = random.choice(to_chain) if type(to_chain) == list else to_chain
@@ -27,7 +28,7 @@ class ZkMessage(Help):
         self.scan = DATA[self.chain]['scan']
         self.account = self.w3.eth.account.from_key(self.privatekey)
         self.address = self.account.address
-        self.delay = delay
+        self.delay = DELAY
         self.proxy = proxy or None
 
     async def auth(self):
@@ -104,7 +105,7 @@ class ZkMessage(Help):
                             token = (json.loads(await response.text()))['token']
                             headers['authorization'] = f'Bearer {token}'
                             return headers
-                        await asyncio.sleep(5)
+                        await asyncio.sleep(random.randint(1, 10))
 
             except Exception as e:
                 logger.error(F'{self.address}:{self.chain} - {e}')
@@ -135,7 +136,7 @@ class ZkMessage(Help):
                 logger.info(f'{self.address}:{self.chain} - L0 не активен, жду 30 секунд...')
                 await asyncio.sleep(30)
         except Exception as e:
-            await asyncio.sleep(1)
+            await asyncio.sleep(2)
 
     async def msg(self, headers, contract_msg, msg, from_chain, to_chain, tx_hash):
 
@@ -184,7 +185,7 @@ class ZkMessage(Help):
             return await self.create_msg()
 
     async def send_msg(self):
-        time_ = random.randint(start_delay[0], start_delay[1])
+        time_ = random.randint(INITIAL_DELAY[0], INITIAL_DELAY[1])
         logger.info(f'Начинаю работу через {time_} cекунд...')
         await asyncio.sleep(time_)
         data = await self.profile()
@@ -200,7 +201,7 @@ class ZkMessage(Help):
         dst_address = Web3.to_checksum_address(dst_addresses[self.to_chain])
         lzdst_address = Web3.to_checksum_address(lzdst_addresses[self.to_chain])
         mailer = self.w3.eth.contract(address=contract_msg, abi=mailer_abi)
-        native_ = DATA[self.chain]
+        native_ = DATA[self.chain]['token']
 
         while True:
             try:
@@ -231,8 +232,8 @@ class ZkMessage(Help):
 
                 sign = self.account.sign_transaction(tx)
                 hash_ = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
-                status = await self.check_status_tx(hash_)
-                await self.sleep_indicator(5)
+                status = await self.check_status_tx(hash_, self.chain)
+                await self.sleep_indicator(5, self.chain)
                 if status == 1:
                     logger.success(
                         f'{self.address}:{self.chain} - успешно отправил сообщение {message} в {self.to_chain} : {self.scan}{self.w3.to_hex(hash_)}...')

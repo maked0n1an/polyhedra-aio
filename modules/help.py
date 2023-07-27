@@ -1,7 +1,8 @@
 import time
 import asyncio
+import random
 from loguru import logger
-from input_data.config import MAX_WAIT_TIME
+from input_data.config import *
 from util.data import *
 from util.chain import Chain
 
