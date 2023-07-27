@@ -18,7 +18,7 @@ from util.activity import Activity
 from util.data import *
 from util.session import Session
 from util.chain import Chain
-from util.file_readers import *
+from util.file_utils import *
 from util.operations import *
 
 async def run_wallet(private_key, proxy, activities_list_item, i):
