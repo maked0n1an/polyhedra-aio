@@ -16,6 +16,7 @@ from input_data.config import *
 from modules.help import Help
 from util.data import *
 from util.chain import Chain
+from util.file_utils import *
 
 
 class ZkBridge(Help):
@@ -34,18 +35,7 @@ class ZkBridge(Help):
         self.delay = DELAY
         self.moralisapi = MORALIS_API_KEY
         self.proxy = proxy or None
-        self.logger = self.setup_logger()
-
-    def setup_logger(self): 
-        wallet_logger = logger.bind(wallet_name=self.wallet_name)       
-        wallet_logger.add(
-            rf"logs\log_{self.wallet_name}.log",
-            format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
-            "{level: <8}</level> | <cyan>"
-            "</cyan> <white>{message}</white>",
-            filter=lambda record: record["extra"].get("wallet_name") == self.wallet_name
-        )
-        return wallet_logger
+        self.logger = write_to_logs(self.wallet_name)
 
     async def auth(self):
         ua = UserAgent()
