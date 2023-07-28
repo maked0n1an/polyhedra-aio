@@ -34,19 +34,31 @@ class ZkBridge(Help):
         self.delay = DELAY
         self.moralisapi = MORALIS_API_KEY
         self.proxy = proxy or None
-        self.logger = self.setup_logger(self.address, self.wallet_name)
+        # self.logger = logger.bind()
+        # self.logger = logger.add(
+        #     rf"logs\log_{wallet_name}.log",
+        #     format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
+        #     "{level: <8}</level> | <cyan>"
+        #     "</cyan> <white>{message}</white>",
+        # )
+        self.logger = self.setup_logger()
 
-    def setup_logger(self, address, wallet_name):
+    def setup_logger(self):
         global_logger.remove()
-        logger = copy.deepcopy(global_logger)
-        logger.add(
-            rf"logs\log_{wallet_name}.log",
+        wallet_logger = copy.deepcopy(global_logger)
+        wallet_logger.add(
+            rf"logs\log_{self.wallet_name}.log",
             format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
             "{level: <8}</level> | <cyan>"
             "</cyan> <white>{message}</white>",
         )
-
-        return logger
+        wallet_logger.add(
+            sys.stderr,
+            format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
+            "{level: <8}</level> | <cyan>"
+            "</cyan> <white>{message}</white>",
+        )
+        return wallet_logger
 
     async def auth(self):
         ua = UserAgent()
