@@ -197,11 +197,11 @@ class ZkBridge(Help):
                 sign = self.account.sign_transaction(tx)
                 hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
                 status = await self.check_status_tx(self.wallet_name, self.address, self.chain, hash)
-                await self.sleep_indicator(5, self.chain)
+                await self.sleep_indicator(self.chain)
                 if status == 1:
                     self.logger.success(
                         f'{self.wallet_name} | {self.address} | {self.chain} - успешно заминтил "{self.nft}" : {scan}{self.w3.to_hex(hash)}...')
-                    await self.sleep_indicator(5, self.chain)
+                    self.sleep_indicator(self.chain)
                     return headers
                 else:
                     self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пробую минт еще раз...')
@@ -273,11 +273,11 @@ class ZkBridge(Help):
                     sign = self.account.sign_transaction(tx)
                     hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
                     status = await self.check_status_tx(self.wallet_name, self.address, self.chain, hash)
-                    await self.sleep_indicator(5, self.chain)
+                    self.sleep_indicator(self.chain)
                     if status == 1:
                         self.logger.success(
                             f'{self.wallet_name} | {self.address} | {self.chain} - успешно апрувнул "{self.nft}"[{id_}] : {scan}{self.w3.to_hex(hash)}...')
-                        await self.sleep_indicator(5, self.chain)
+                        self.sleep_indicator(self.chain)
                         return True
                     else:
                         self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пробую апрув еще раз...')
@@ -344,11 +344,11 @@ class ZkBridge(Help):
                     sign = self.account.sign_transaction(tx)
                     hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
                     status = await self.check_status_tx(self.wallet_name, self.address, self.chain, hash)
-                    await self.sleep_indicator(5, self.chain)
+                    self.sleep_indicator(self.chain)
                     if status == 1:
                         self.logger.success(
                             f'{self.wallet_name} | {self.address} | {self.chain} - успешно бриджанул "{self.nft}"[{id_}] в {self.to_chain}: {scan}{self.w3.to_hex(hash)}...')
-                        await self.sleep_indicator(5, self.chain)
+                        self.sleep_indicator(self.chain)
                         return self.private_key, self.address, f'successfully bridged "{self.nft}" to {self.to_chain}'
                     else:
                         self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пробую бриджить еще раз...')

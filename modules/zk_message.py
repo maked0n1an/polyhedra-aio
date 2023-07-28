@@ -235,7 +235,7 @@ class ZkMessage(Help):
                 sign = self.account.sign_transaction(tx)
                 hash_ = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
                 status = await self.check_status_tx(self.wallet_name, self.address, self.chain, hash_)
-                await self.sleep_indicator(5, self.chain)
+                self.sleep_indicator(self.chain)
                 if status == 1:
                     self.logger.success(
                         f'{self.wallet_name} | {self.address} | {self.chain} - успешно отправил сообщение {message} в {self.to_chain} : {self.scan}{self.w3.to_hex(hash_)}...')
@@ -243,7 +243,7 @@ class ZkMessage(Help):
                     msg = await self.msg(headers, contract_msg, message, from_chain_id, to_chain_id,
                                          self.w3.to_hex(hash_))
                     if msg:
-                        await self.sleep_indicator(5, self.chain)
+                        self.sleep_indicator(self.chain)
                         return self.privatekey, self.address, f'success sending message to {self.to_chain}'
                 else:
                     self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пробую еще раз отправлять сообщение...')

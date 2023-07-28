@@ -35,6 +35,7 @@ class Help:
         await asyncio.sleep(secs)
 
     async def sleep_indicator(self, secs, chain):
+        secs = 5
         logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - жду {secs} секунд...')
         await asyncio.sleep(secs)
 
