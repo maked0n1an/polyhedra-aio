@@ -13,17 +13,23 @@ with open(f"{out_file}input_data/private_keys.txt", "r") as f:
 
 with open(f"{out_file}input_data/wallet_names.txt", "r") as f:
     WALLET_NAMES = [row.strip() for row in f]
-    
+
+loggers = {}
+
 def write_to_logs(wallet_name):
-    wallet_logger = logger.bind(wallet_name=wallet_name)       
-    wallet_logger.add(
-        rf"logs\log_{wallet_name}.log",
-        format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
-        "{level: <8}</level> | <cyan>"
-        "</cyan> <white>{message}</white>",
-        filter=lambda record: record["extra"].get("wallet_name") == wallet_name
-    )
-    return wallet_logger
+    if wallet_name not in loggers:
+        wallet_logger = logger.bind(wallet_name=wallet_name)       
+        wallet_logger.add(
+            rf"logs\log_{wallet_name}.log",
+            format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
+            "{level: <8}</level> | <cyan>"
+            "</cyan> <white>{message}</white>",
+            filter=lambda record: record["extra"].get("wallet_name") == wallet_name
+        )        
+        loggers[wallet_name] = wallet_logger
+        return wallet_logger
+    else:
+        return loggers[wallet_name]
     
 def write_to_main_log():
     logger.remove()

@@ -31,10 +31,10 @@ class Help:
 
     async def sleep_initial_indicator(wallet_name, address):
         secs = random.randint(INITIAL_DELAY[0], INITIAL_DELAY[1])
-        logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пауза в виде {secs} секунд...')
+        logger.info(f'{wallet_name} | {address} - пауза в виде {secs} секунд...')
         await asyncio.sleep(secs)
 
-    async def sleep_indicator(self, secs, chain):
+    async def sleep_indicator(self, chain):
         secs = 5
         logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - жду {secs} секунд...')
         await asyncio.sleep(secs)

@@ -24,25 +24,26 @@ async def run_wallet(wallet_name, private_key, proxy, i):
     session = Session.get_web3_session_via_proxy(proxy)
     web3 = Web3(provider=Web3.HTTPProvider(DATA[Chain.BSC]['rpc'], session=session))
     only_ip_proxy = proxy.split('@')[1]
-
     address = web3.eth.account.from_key(private_key).address
     logger.success(f"Current proxy  ({i}/{len(PROXIES)}): {only_ip_proxy}")
     logger.success(f"Current wallet ({i}/{len(PRIVATE_KEYS)}): {wallet_name} | {address}")
 
     activities_list = [
         Activity.GREENFIELD_TESTNET_MINT,
-        # Activity.OP_BNB_OPERATIONS,
-        # Activity.PANDRA_CODECONQUEROR_OPERATIONS,
-        # Activity.PANDRA_PIXELBROWLER_OPERATIONS,
-        # Activity.PANDRA_MELODYMAVEN_OPERATIONS,
-        # Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
-        # Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
-        # Activity.BSC_POLYGON_ZKMESSENGER,
-        # Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
-        # Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS
+        Activity.OP_BNB_OPERATIONS,
+        Activity.PANDRA_CODECONQUEROR_OPERATIONS,
+        Activity.PANDRA_PIXELBROWLER_OPERATIONS,
+        Activity.PANDRA_MELODYMAVEN_OPERATIONS,
+        Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
+        Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
+        Activity.BSC_POLYGON_ZKMESSENGER,
+        Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
+        Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS
     ]
 
     random.shuffle(activities_list)
+
+    await Help.sleep_initial_indicator(wallet_name, address)
 
     for activity in activities_list:
         await run_activity(activity, wallet_name, private_key, proxy)
@@ -106,17 +107,11 @@ async def main():
     if IS_SHUFFLE_KEYS:
         random.shuffle(wallet_key_proxy_tuple)
 
-    # for i, (private_key, proxy) in enumerate(key_proxy_pairs, 1):
-    #     tasks.append(asyncio.create_task(run_wallet(private_key, wallet_name, proxy, i)))
-
     for i, ((wallet_name, private_key), proxy) in enumerate(wallet_key_proxy_tuple.items(), 1):
         task = asyncio.create_task(run_wallet(wallet_name, private_key, proxy, i))
         tasks.append(task)    
 
-    # for (private_key, proxy), activities_list_item in zip(key_proxy_pairs, activities_list):
-    #     tasks.append(asyncio.create_task(run_wallet(private_key, proxy, activities_list_item )))
-
-    res = await asyncio.gather(*tasks)
+    await asyncio.gather(*tasks)
 
     logger.info("The bot has ended its work")
 
