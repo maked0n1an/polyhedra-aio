@@ -5,7 +5,7 @@ import aiohttp
 import copy
 
 from web3 import Web3
-from loguru import logger as global_logger
+from loguru import logger
 from fake_useragent import UserAgent
 from eth_account.messages import encode_defunct
 from web3.eth import AsyncEth
@@ -34,29 +34,16 @@ class ZkBridge(Help):
         self.delay = DELAY
         self.moralisapi = MORALIS_API_KEY
         self.proxy = proxy or None
-        # self.logger = logger.bind()
-        # self.logger = logger.add(
-        #     rf"logs\log_{wallet_name}.log",
-        #     format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
-        #     "{level: <8}</level> | <cyan>"
-        #     "</cyan> <white>{message}</white>",
-        # )
         self.logger = self.setup_logger()
 
-    def setup_logger(self):
-        global_logger.remove()
-        wallet_logger = copy.deepcopy(global_logger)
+    def setup_logger(self): 
+        wallet_logger = logger.bind(wallet_name=self.wallet_name)       
         wallet_logger.add(
             rf"logs\log_{self.wallet_name}.log",
             format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
             "{level: <8}</level> | <cyan>"
             "</cyan> <white>{message}</white>",
-        )
-        wallet_logger.add(
-            sys.stderr,
-            format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
-            "{level: <8}</level> | <cyan>"
-            "</cyan> <white>{message}</white>",
+            filter=lambda record: record["extra"].get("wallet_name") == self.wallet_name
         )
         return wallet_logger
 
