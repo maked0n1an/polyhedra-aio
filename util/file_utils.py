@@ -1,7 +1,7 @@
 import copy
 import sys
 
-from loguru import logger as global_logger
+from loguru import logger
 
 out_file = ''
 
@@ -14,30 +14,30 @@ with open(f"{out_file}input_data/private_keys.txt", "r") as f:
 with open(f"{out_file}input_data/wallet_names.txt", "r") as f:
     WALLET_NAMES = [row.strip() for row in f]
     
-def write_to_logs(address, wallet_name):
-    new_logger = global_logger.bind()
-    new_logger.remove()
-    new_logger.add(
-        f"{out_file}logs/log_{wallet_name}.log",
+def write_to_logs(address, wallet_name):    
+    write_to_main_log()
+    logger.add(
+        rf"logs\log_{wallet_name}.log",
         format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
         "{level: <8}</level> | <cyan>"
         "</cyan> <white>{message}</white>",
     )
 
-    return new_logger
+    return logger
 
-def main_log(log_file_name):
-    main_logger = global_logger.bind()
-    main_logger.remove()
-    global_logger.add(
+def write_to_main_log():
+    logger.remove()
+    logger.add(
         sys.stderr,
-        format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>{level: <8}</level> | <cyan></cyan> <white>{message}</white>",
-    )
-    global_logger.add(
-        log_file_name,
         format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
         "{level: <8}</level> | <cyan>"
         "</cyan> <white>{message}</white>",
     )
-
-    return main_logger
+    logger.add(
+        "main.log",
+        format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
+        "{level: <8}</level> | <cyan>"
+        "</cyan> <white>{message}</white>",
+    )
+    
+    return logger

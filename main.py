@@ -7,7 +7,7 @@ import concurrent.futures
 from termcolor import colored
 from art import text2art
 from web3 import Web3
-from loguru import logger as global_logger
+from loguru import logger
 
 from input_data.config import *
 from modules.zk_bridge import ZkBridge
@@ -27,19 +27,19 @@ async def run_wallet(wallet_name, private_key, proxy, i):
 
     address = web3.eth.account.from_key(private_key).address
     logger.success(f"Current proxy  ({i}/{len(PROXIES)}): {only_ip_proxy}")
-    logger.success(f"Current wallet ({i}/{len(PRIVATE_KEYS)}): {wallet_name} : {address}")
+    logger.success(f"Current wallet ({i}/{len(PRIVATE_KEYS)}): {wallet_name} | {address}")
 
     activities_list = [
         Activity.GREENFIELD_TESTNET_MINT,
-        Activity.OP_BNB_OPERATIONS,
+        # Activity.OP_BNB_OPERATIONS,
         # Activity.PANDRA_CODECONQUEROR_OPERATIONS,
         # Activity.PANDRA_PIXELBROWLER_OPERATIONS,
         # Activity.PANDRA_MELODYMAVEN_OPERATIONS,
         # Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
-        Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
-        Activity.BSC_POLYGON_ZKMESSENGER,
-        Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
-        Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS
+        # Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
+        # Activity.BSC_POLYGON_ZKMESSENGER,
+        # Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
+        # Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS
     ]
 
     random.shuffle(activities_list)
@@ -48,34 +48,30 @@ async def run_wallet(wallet_name, private_key, proxy, i):
         await run_activity(activity, wallet_name, private_key, proxy, address)
 
 async def run_activity(activity: Activity, wallet_name, private_key, proxy, address):
-    i = 0
 
     if activity == Activity.GREENFIELD_TESTNET_MINT:
-        logger.info(f"{address}: Запущен минт Greenfield NFT")
         await do_greenfield_mint_nft(private_key=private_key, wallet_name=wallet_name, proxy=proxy)
 
-    if activity == Activity.OP_BNB_OPERATIONS:
-        logger.info(f"{address}: Запущен минт и бридж opBNB NFT")        
+    if activity == Activity.OP_BNB_OPERATIONS:    
         await do_op_bnb_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy)
         
     if activity == Activity.PANDRA_CODECONQUEROR_OPERATIONS:
-        i += 1
-        logger.info(f"{address}: Запущен минт и бридж Pandra CodeConqueror ({i}/4 из Pandra'с)")
+        logger.info(f"{address}: Запущен минт и бридж Pandra CodeConqueror")
         await do_pandra_codeconquer_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
 
     if activity == Activity.PANDRA_PIXELBROWLER_OPERATIONS:
         i += 1
-        logger.info(f"{address}: Запущен минт и бридж Pandra PixelBowler ({i}/4 из Pandra'с)")
+        logger.info(f"{address}: Запущен минт и бридж Pandra PixelBowler")
         await do_pandra_pixelbowler_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
 
     if activity == Activity.PANDRA_MELODYMAVEN_OPERATIONS:
         i += 1
-        logger.info(f"{address}: Запущен минт и бридж Pandra MelodyMaven ({i}/4 из Pandra'с)")
+        logger.info(f"{address}: Запущен минт и бридж Pandra MelodyMaven")
         await do_pandra_melodymaven_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
 
     if activity == Activity.PANDRA_ECOGUARDIAN_OPERATIONS:
         i += 1
-        logger.info(f"{address}: Запущен минт и бридж Pandra EcoGuardian ({i}/4 из Pandra'с)")
+        logger.info(f"{address}: Запущен минт и бридж Pandra EcoGuardian")
         await do_pandra_ecoguardian_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
 
     if activity == Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS:
@@ -94,8 +90,6 @@ async def run_activity(activity: Activity, wallet_name, private_key, proxy, addr
     if activity == Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS:
         logger.info(f"{address}: Запущен минт и бридж ZkLightClient NFT")
         await do_zk_light_client_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
-    
-    return i
 
 async def main():
     if MORALIS_API_KEY == '':
@@ -144,12 +138,7 @@ if __name__ == "__main__":
     art = text2art(text="DropBot", font="standart")
     print(colored(art, "cyan"))
     print(colored(f"Authors: {authors[0]}, {authors[1]}\n", "cyan"))
-    # logger.add(
-    #     sys.stderr,
-    #     format="<lm>{time:YYYY-MM-DD HH:mm:ss}</lm> | <level>{level: <8}</level>| <lw>{message}</lw>",
-    # )
-    log_file_name = 'main.log'
         
-    main_log(log_file_name)
+    write_to_main_log()
 
     asyncio.run(main())

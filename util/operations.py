@@ -7,15 +7,17 @@ from modules.zk_message import ZkMessage
 from util.chain import Chain
 from util.activity import Activity
 
-async def do_greenfield_mint_nft(private_key, wallet_name, proxy):
-    logger.info('we are here')
+
+
+async def do_greenfield_mint_nft(private_key, wallet_name, proxy): 
     zk = ZkBridge(private_key=private_key,
         wallet_name=wallet_name,
         chain=GREENFIELD_MINT_CHAIN, 
         to_chain=None,
         nft="Greenfield Testnet",
         proxy=proxy)
-    logger.info('we are here after zk')
+    
+    logger.info(f'{wallet_name} | Запущен минт Greenfield NFT')
     
     await zk.mint()
 

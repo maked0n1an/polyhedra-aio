@@ -8,18 +8,18 @@ from util.chain import Chain
 
 
 class Help:
-    async def check_status_tx(self, tx_hash, chain):
-        scan = DATA[self.chain]['scan']
+    async def check_status_tx(self, wallet_name, address, chain, tx_hash):
+        scan = DATA[chain]['scan']
 
         logger.info(
-            f'{self.address}:{self.chain} - жду подтверждения транзакции {scan}{self.w3.to_hex(tx_hash)}...')
+            f'{wallet_name} | {address} | {chain} - жду подтверждения транзакции {scan}{self.w3.to_hex(tx_hash)}...')
 
         start_time = int(time.time())
         while True:
             current_time = int(time.time())
             if current_time >= start_time + MAX_WAIT_TIME:
                 logger.info(
-                    f'{self.address} - транзакция не подтвердилась за {MAX_WAIT_TIME} cекунд, начинаю повторную отправку...')
+                    f'{self.wallet_name} | {self.address} | {self.chain} - транзакция не подтвердилась за {MAX_WAIT_TIME} cекунд, начинаю повторную отправку...')
                 return 0
             try:
                 status = (await self.w3.eth.get_transaction_receipt(tx_hash))['status']
@@ -29,13 +29,13 @@ class Help:
             except Exception as error:
                 await asyncio.sleep(1)
 
-    async def sleep_initial_indicator(address):
+    async def sleep_initial_indicator(wallet_name, address):
         secs = random.randint(INITIAL_DELAY[0], INITIAL_DELAY[1])
-        logger.info(f'{address}: - пауза в виде {secs} секунд...')
+        logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пауза в виде {secs} секунд...')
         await asyncio.sleep(secs)
 
     async def sleep_indicator(self, secs, chain):
-        logger.info(f'{self.address}:{self.chain} - жду {secs} секунд...')
+        logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - жду {secs} секунд...')
         await asyncio.sleep(secs)
 
     async def set_gas_price_for_bsc_or_core(self, tx):

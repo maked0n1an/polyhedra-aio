@@ -31,19 +31,8 @@ class ZkMessage(Help):
         self.address = self.account.address
         self.delay = DELAY
         self.proxy = proxy or None
-        self.logger = self.create_logger(wallet_name)
+        self.logger = write_to_logs(self.address, wallet_name)
     
-    def create_logger(self, name):
-        logger = global_logger.bind()
-        logger.remove()
-        logger.add(
-            f"logs/log_{name}.log",
-            format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
-            "{level: <8}</level> | <cyan>"
-            "</cyan> <white>{message}</white>",
-        )
-        return logger
-
     async def auth(self):
         ua = UserAgent()
         ua = ua.random
