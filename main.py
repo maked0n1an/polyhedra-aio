@@ -45,50 +45,38 @@ async def run_wallet(wallet_name, private_key, proxy, i):
     random.shuffle(activities_list)
 
     for activity in activities_list:
-        await run_activity(activity, wallet_name, private_key, proxy, address)
+        await run_activity(activity, wallet_name, private_key, proxy)
 
-async def run_activity(activity: Activity, wallet_name, private_key, proxy, address):
+async def run_activity(activity: Activity, wallet_name, private_key, proxy):
 
     if activity == Activity.GREENFIELD_TESTNET_MINT:
-        await do_greenfield_mint_nft(private_key=private_key, wallet_name=wallet_name, proxy=proxy)
+        await do_greenfield_mint_nft(wallet_name=wallet_name,private_key=private_key, proxy=proxy)
 
     if activity == Activity.OP_BNB_OPERATIONS:    
         await do_op_bnb_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy)
         
     if activity == Activity.PANDRA_CODECONQUEROR_OPERATIONS:
-        logger.info(f"{address}: Запущен минт и бридж Pandra CodeConqueror")
         await do_pandra_codeconquer_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
 
     if activity == Activity.PANDRA_PIXELBROWLER_OPERATIONS:
-        i += 1
-        logger.info(f"{address}: Запущен минт и бридж Pandra PixelBowler")
         await do_pandra_pixelbowler_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
 
     if activity == Activity.PANDRA_MELODYMAVEN_OPERATIONS:
-        i += 1
-        logger.info(f"{address}: Запущен минт и бридж Pandra MelodyMaven")
         await do_pandra_melodymaven_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
 
     if activity == Activity.PANDRA_ECOGUARDIAN_OPERATIONS:
-        i += 1
-        logger.info(f"{address}: Запущен минт и бридж Pandra EcoGuardian")
         await do_pandra_ecoguardian_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
 
     if activity == Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS:
-        logger.info(f"{address}: Запущен минт и бридж Alpha NFT Core DAO")
         await do_alpha_nft_core_dao_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
         
     if activity == Activity.BSC_POLYGON_ZKMESSENGER:
-        logger.info(f"{address}: Запущена активность с отправкой сообщений ZkMessenger")
-        await do_messenger(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
-        logger.info(f"{address}: skipped this activity")
+        await do_messenger(private_key=private_key, wallet_name=wallet_name, proxy=proxy)
 
     if activity == Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS:
-        logger.info(f"{address}: Запущен минт и бридж BNB Luban NFT")
         await do_bnb_luban_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
 
     if activity == Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS:
-        logger.info(f"{address}: Запущен минт и бридж ZkLightClient NFT")
         await do_zk_light_client_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
 
 async def main():

@@ -9,16 +9,15 @@ from util.activity import Activity
 
 
 
-async def do_greenfield_mint_nft(private_key, wallet_name, proxy): 
-    zk = ZkBridge(private_key=private_key,
-        wallet_name=wallet_name,
+async def do_greenfield_mint_nft(private_key, wallet_name, proxy):
+    zk = ZkBridge(wallet_name=wallet_name,
+        private_key=private_key,        
         chain=GREENFIELD_MINT_CHAIN, 
         to_chain=None,
         nft="Greenfield Testnet",
         proxy=proxy)
     
-    logger.info(f'{wallet_name} | Запущен минт Greenfield NFT')
-    
+    zk.logger.info(f'{wallet_name} | Запущен минт Greenfield NFT')
     await zk.mint()
 
 async def do_op_bnb_operations(private_key, wallet_name, proxy):
@@ -28,7 +27,7 @@ async def do_op_bnb_operations(private_key, wallet_name, proxy):
         to_chain=OP_BNB_BRIDGE_CHAIN[1], 
         nft='ZkBridge on opBNB',
         proxy=proxy)  
-
+    zk.logger.info(f'{wallet_name} | Запущен минт и бридж opBNB NFT on zkbridge')
     await zk.bridge_nft()
 
 async def do_pandra_codeconquer_operations(private_key, wallet_name, proxy):
@@ -38,7 +37,8 @@ async def do_pandra_codeconquer_operations(private_key, wallet_name, proxy):
         to_chain=PANDRA_CODECONQUEROR_BRIDGE[1],
         nft='Pandra',
         proxy=proxy)
-
+    
+    zk.logger.info(f"{wallet_name}: Запущен минт и бридж Pandra CodeConqueror")
     await zk.bridge_nft()
 
 async def do_pandra_pixelbowler_operations(private_key, wallet_name, proxy):
@@ -48,7 +48,8 @@ async def do_pandra_pixelbowler_operations(private_key, wallet_name, proxy):
         to_chain=PANDRA_CODECONQUEROR_BRIDGE[1],
         nft='Pandra',
         proxy=proxy)
-    
+        
+    zk.logger.info(f"{wallet_name}: Запущен минт и бридж Pandra PixelBowler")
     await zk.bridge_nft()
 
 async def do_pandra_melodymaven_operations(private_key, wallet_name, proxy):
@@ -58,7 +59,8 @@ async def do_pandra_melodymaven_operations(private_key, wallet_name, proxy):
         to_chain=PANDRA_MELODYMAVEN_BRIDGE[1],
         nft='Pandra',
         proxy=proxy)
-    
+
+    zk.logger.info(f'{wallet_name}: Запущен минт и бридж Pandra MelodyMaven')
     await zk.bridge_nft()
 
 async def do_pandra_ecoguardian_operations(private_key, wallet_name, proxy):
@@ -68,7 +70,7 @@ async def do_pandra_ecoguardian_operations(private_key, wallet_name, proxy):
         to_chain=PANDRA_ECOGUARDIAN_BRIDGE[1],
         nft='Pandra',
         proxy=proxy)
-    
+    zk.logger.info(f'{wallet_name}: Запущен минт и бридж Pandra EcoGuardian')
     await zk.bridge_nft()
 
 async def do_alpha_nft_core_dao_operations(private_key, wallet_name, proxy):
@@ -78,7 +80,8 @@ async def do_alpha_nft_core_dao_operations(private_key, wallet_name, proxy):
         to_chain=MAINNET_ALPHA_NFT_CORE_BRIDGE[1],
         nft='Mainnet Alpha',
         proxy=proxy)
-    
+
+    zk.logger.info(f'{wallet_name}: Запущен минт и бридж Alpha NFT Core DAO')    
     await zk.bridge_nft()
 
 async def do_messenger(private_key, wallet_name, proxy):
@@ -87,7 +90,8 @@ async def do_messenger(private_key, wallet_name, proxy):
         chain=BSC_POLYGON_ZKMESSENGER[0],
         to_chain=BSC_POLYGON_ZKMESSENGER[1],
         proxy=proxy)
-    
+
+    zk.logger.info(f'{wallet_name}: Запущена активность с отправкой сообщений ZkMessenger')    
     await zk.send_msg()
 
 async def do_bnb_luban_operations(private_key, wallet_name, proxy):
@@ -97,7 +101,8 @@ async def do_bnb_luban_operations(private_key, wallet_name, proxy):
         to_chain=BNB_CHAIN_LUBAN_NFT_BRIDGE[1],
         nft='Luban',
         proxy=proxy)
-
+    
+    zk.logger.info(f'{wallet_name}: Запущен минт и бридж BNB Luban NFT')
     await zk.bridge_nft()
 
 async def do_zk_light_client_operations(private_key, wallet_name, proxy):
@@ -108,4 +113,5 @@ async def do_zk_light_client_operations(private_key, wallet_name, proxy):
         nft='zkLightClient',
         proxy=proxy)
 
+    zk.logger.info(f'{wallet_name}: Запущен минт и бридж ZkLightClient NFT')
     await zk.bridge_nft()
