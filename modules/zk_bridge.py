@@ -2,6 +2,7 @@ import json
 import random
 import asyncio
 import aiohttp
+import copy
 
 from web3 import Web3
 from loguru import logger as global_logger
@@ -15,7 +16,6 @@ from input_data.config import *
 from modules.help import Help
 from util.data import *
 from util.chain import Chain
-from util.file_utils import write_to_logs
 
 
 class ZkBridge(Help):
@@ -34,7 +34,19 @@ class ZkBridge(Help):
         self.delay = DELAY
         self.moralisapi = MORALIS_API_KEY
         self.proxy = proxy or None
-        self.logger = write_to_logs(self.address, self.wallet_name)
+        self.logger = self.setup_logger(self.address, self.wallet_name)
+
+    def setup_logger(self, address, wallet_name):
+        global_logger.remove()
+        logger = copy.deepcopy(global_logger)
+        logger.add(
+            rf"logs\log_{wallet_name}.log",
+            format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
+            "{level: <8}</level> | <cyan>"
+            "</cyan> <white>{message}</white>",
+        )
+
+        return logger
 
     async def auth(self):
         ua = UserAgent()

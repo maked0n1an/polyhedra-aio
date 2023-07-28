@@ -14,8 +14,8 @@ with open(f"{out_file}input_data/private_keys.txt", "r") as f:
 with open(f"{out_file}input_data/wallet_names.txt", "r") as f:
     WALLET_NAMES = [row.strip() for row in f]
     
-def write_to_logs(address, wallet_name):    
-    write_to_main_log()
+def write_to_logs(address, wallet_name):
+    logger.remove()
     logger.add(
         rf"logs\log_{wallet_name}.log",
         format="<white>{time: MM/DD/YYYY HH:mm:ss}</white> | <level>"
