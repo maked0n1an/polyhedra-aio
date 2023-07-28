@@ -5,8 +5,8 @@ import aiohttp
 import time
 
 from web3 import Web3
-from fake_useragent import UserAgent
 from loguru import logger
+from fake_useragent import UserAgent
 from eth_account.messages import encode_defunct
 from web3.eth import AsyncEth
 from eth_utils import *
@@ -16,12 +16,13 @@ from input_data.config import *
 from modules.help import Help
 from util.data import *
 from util.chain import Chain
-from util.file_utils import write_to_logs
+from util.file_utils import *
 
 
 class ZkMessage(Help):
     def __init__(self, private_key, wallet_name, chain: str, to_chain: str, proxy=None):
         self.privatekey = private_key
+        self.wallet_name = wallet_name
         self.chain = chain
         self.to_chain = random.choice(to_chain) if type(to_chain) == list else to_chain
         self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.chain]['rpc']),
@@ -29,9 +30,8 @@ class ZkMessage(Help):
         self.scan = DATA[self.chain]['scan']
         self.account = self.w3.eth.account.from_key(self.privatekey)
         self.address = self.account.address
-        self.delay = DELAY
         self.proxy = proxy or None
-        self.logger = write_to_logs(self.address, wallet_name)
+        self.logger = write_to_logs(self.wallet_name)
     
     async def auth(self):
         ua = UserAgent()
@@ -73,7 +73,7 @@ class ZkMessage(Help):
                             }
                             return signature, ua
             except Exception as e:
-                self.logger.error(f'{self.address}:{self.chain} - {e}')
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}')
                 await asyncio.sleep(5)
 
     async def sign(self):
@@ -110,7 +110,7 @@ class ZkMessage(Help):
                         await asyncio.sleep(random.randint(1, 10))
 
             except Exception as e:
-                self.logger.error(F'{self.address}:{self.chain} - {e}')
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}')
                 await asyncio.sleep(5)
 
     async def profile(self):
@@ -121,10 +121,10 @@ class ZkMessage(Help):
                 async with session.get('https://api.zkbridge.com/api/user/profile',
                                        params=params, headers=headers, proxy=self.proxy) as response:
                     if response.status == 200:
-                        self.logger.success(f'{self.address}:{self.chain} - успешно авторизовался...')
+                        self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - успешно авторизовался...')
                         return headers
         except Exception as e:
-            self.logger.error(f'{self.address}:{self.chain} - {e}')
+            self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}')
             return False
 
     async def check_status_lz(self):
@@ -132,10 +132,10 @@ class ZkMessage(Help):
         mailer = self.w3.eth.contract(address=contract_msg, abi=mailer_abi)
         try:
             if not await mailer.functions.layerZeroPaused().call():
-                self.logger.success(f'{self.address}:{self.chain} - L0 активен...')
+                self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - L0 активен...')
                 return True
             else:
-                self.logger.info(f'{self.address}:{self.chain} - L0 не активен, жду 30 секунд...')
+                self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - L0 не активен, жду 30 секунд...')
                 await asyncio.sleep(30)
         except Exception as e:
             await asyncio.sleep(2)
@@ -162,10 +162,10 @@ class ZkMessage(Help):
                 async with session.get('https://api.zkbridge.com/api/user/profile',
                                        json=json_data, headers=headers, proxy=self.proxy) as response:
                     if response.status == 200:
-                        self.logger.success(f'{self.address}:{self.chain} - cообщение подтвержденно...')
+                        self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - cообщение подтвержденно...')
                         return True
         except Exception as e:
-            self.logger.error(f'{self.address}:{self.chain} - {e}')
+            self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}')
             return False
 
     async def create_msg(self):
@@ -187,8 +187,8 @@ class ZkMessage(Help):
             return await self.create_msg()
 
     async def send_msg(self):
-        time_ = random.randint(INITIAL_DELAY[0], INITIAL_DELAY[1])
-        self.logger.info(f'Начинаю работу через {time_} cекунд...')
+        time_ = random.randint(DELAY[0], DELAY[1])
+        self.logger.info(f'{self.wallet_name} | {self.address} - Начинаю работу через {time_} cекунд...')
         await asyncio.sleep(time_)
         data = await self.profile()
         if data:
@@ -212,7 +212,7 @@ class ZkMessage(Help):
                 fee = await mailer.functions.estimateLzFee(lz_id, self.address, message).call()
                 value = fee + zkFee
                 self.logger.info(
-                    f'{self.address}:{self.chain} - начинаю отправку сообщения в {self.to_chain} через L0, предполагаемая комса - {(fee + zkFee) / 10 ** 18} {native_}...')
+                    f'{self.wallet_name} | {self.address} | {self.chain} - начинаю отправку сообщения в {self.to_chain} через L0, предполагаемая комса - {(fee + zkFee) / 10 ** 18} {native_}...')
                 nonce = await self.w3.eth.get_transaction_count(self.address)
                 
                 tx = await mailer.functions.sendMessage(to_chain_id, dst_address, lz_id, lzdst_address, fee,
@@ -234,11 +234,11 @@ class ZkMessage(Help):
 
                 sign = self.account.sign_transaction(tx)
                 hash_ = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
-                status = await self.check_status_tx(hash_, self.chain)
+                status = await self.check_status_tx(self.wallet_name, self.address, self.chain, hash_)
                 await self.sleep_indicator(5, self.chain)
                 if status == 1:
                     self.logger.success(
-                        f'{self.address}:{self.chain} - успешно отправил сообщение {message} в {self.to_chain} : {self.scan}{self.w3.to_hex(hash_)}...')
+                        f'{self.wallet_name} | {self.address} | {self.chain} - успешно отправил сообщение {message} в {self.to_chain} : {self.scan}{self.w3.to_hex(hash_)}...')
                     await asyncio.sleep(5)
                     msg = await self.msg(headers, contract_msg, message, from_chain_id, to_chain_id,
                                          self.w3.to_hex(hash_))
@@ -246,7 +246,7 @@ class ZkMessage(Help):
                         await self.sleep_indicator(5, self.chain)
                         return self.privatekey, self.address, f'success sending message to {self.to_chain}'
                 else:
-                    self.logger.info(f'{self.address}:{self.chain} - пробую еще раз отправлять сообщение...')
+                    self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пробую еще раз отправлять сообщение...')
                     await self.send_msg()
 
             except Exception as e:
@@ -256,9 +256,9 @@ class ZkMessage(Help):
                     await self.send_msg()
                 elif 'INTERNAL_ERROR: insufficient funds' in error or 'insufficient funds for gas * price + value' in error:
                     self.logger.error(
-                        f'{self.address}:{self.chain} - не хватает денег на газ, заканчиваю работу через 5 секунд...')
+                        f'{self.wallet_name} | {self.address} | {self.chain} - не хватает денег на газ, заканчиваю работу через 5 секунд...')
                     await asyncio.sleep(5)
                     return self.privatekey, self.address, 'error - not gas'
                 else:
-                    self.logger.error(f'{self.address}:{self.chain} - {e}...')
+                    self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
                     return self.privatekey, self.address, 'error'

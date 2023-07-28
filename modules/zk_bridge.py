@@ -32,7 +32,6 @@ class ZkBridge(Help):
         self.nft = random.choice(nft) if type(nft) == list else nft
         self.nft_address = nfts_addresses[self.nft][self.chain]
         self.bridge_address = nft_lz_bridge_addresses[self.chain] if self.nft == 'Pandra' and self.to_chain != Chain.COMBO else nft_bridge_addresses[self.chain]
-        self.delay = DELAY
         self.moralisapi = MORALIS_API_KEY
         self.proxy = proxy or None
         self.logger = write_to_logs(self.wallet_name)
@@ -226,7 +225,7 @@ class ZkBridge(Help):
                     return False
 
     async def bridge_nft(self):
-        time_ = random.randint(self.delay[0], self.delay[1])
+        time_ = random.randint(DELAY[0], DELAY[1])
         self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
         await asyncio.sleep(time_)
         id_ = await self.balance_and_get_id()
