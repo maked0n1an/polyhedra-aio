@@ -18,7 +18,7 @@ class Help:
         while True:
             current_time = int(time.time())
             if current_time >= start_time + MAX_WAIT_TIME:
-                logger.info(
+                logger.warning(
                     f'{self.wallet_name} | {self.address} | {self.chain} - транзакция не подтвердилась за {MAX_WAIT_TIME} cекунд, начинаю повторную отправку...')
                 return 0
             try:
