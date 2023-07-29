@@ -1,8 +1,5 @@
 import asyncio
-import csv
 import random
-import sys
-import concurrent.futures
 
 from termcolor import colored
 from art import text2art
@@ -115,7 +112,7 @@ async def main():
 
     await asyncio.gather(*tasks)
 
-    logger.info("The bot has ended its work")
+    logger.info("The bot has ended it's work")
 
 if __name__ == "__main__":
     authors = ["@1liochka1", "@maked0n1an"]
