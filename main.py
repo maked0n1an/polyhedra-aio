@@ -105,7 +105,9 @@ async def main():
     tasks = []
 
     if IS_SHUFFLE_KEYS:
-        random.shuffle(wallet_key_proxy_tuple)
+        items = list(wallet_key_proxy_tuple.items())
+        random.shuffle(items)
+        wallet_key_proxy_tuple = dict(items)
 
     for i, ((wallet_name, private_key), proxy) in enumerate(wallet_key_proxy_tuple.items(), 1):
         task = asyncio.create_task(run_wallet(wallet_name, private_key, proxy, i))
