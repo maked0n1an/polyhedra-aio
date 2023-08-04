@@ -1,5 +1,7 @@
 import copy
 import sys
+import random
+import time
 
 from loguru import logger
 
@@ -16,6 +18,12 @@ with open(f"{out_file}input_data/wallet_names.txt", "r") as f:
 
 loggers = {}
 
+def initial_delay():
+    delay = random.randint(2000,
+        2050)
+    logger.info(f"Waiting {delay} seconds to start bot work")
+    time.sleep(delay)
+
 def write_to_logs(wallet_name):
     if wallet_name not in loggers:
         wallet_logger = logger.bind(wallet_name=wallet_name)       
@@ -30,7 +38,7 @@ def write_to_logs(wallet_name):
         return wallet_logger
     else:
         return loggers[wallet_name]
-    
+        
 def write_to_main_log():
     logger.remove()
     logger.add(

@@ -32,6 +32,7 @@ async def run_wallet(wallet_name, private_key, proxy, i):
         Activity.PANDRA_PIXELBROWLER_OPERATIONS,
         Activity.PANDRA_MELODYMAVEN_OPERATIONS,
         Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
+        Activity.PANDRA_MANTLE_OPERATIONS,
         Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
         Activity.BSC_POLYGON_ZKMESSENGER,
         Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
@@ -64,6 +65,9 @@ async def run_activity(activity: Activity, wallet_name, private_key, proxy):
 
     if activity == Activity.PANDRA_ECOGUARDIAN_OPERATIONS:
         await do_pandra_ecoguardian_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
+
+    if activity == Activity.PANDRA_MANTLE_OPERATIONS:
+        await do_pandra_mantle_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy)
 
     if activity == Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS:
         await do_alpha_nft_core_dao_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 

@@ -27,6 +27,8 @@ DATA = {
     
     Chain.KLAYTN                    : {'rpc': 'https://1rpc.io/klay', 'scan': 'https://scope.klaytn.com/tx/', 'token': 'KLAY', 'chain_id': 8217}, 
 
+    Chain.MANTLE                    : {'rpc': 'https://mantle.publicnode.com', 'scan': 'https://explorer.mantle.xyz/tx', 'token': 'MNT', 'chain_id': '5000'},
+
     Chain.METIS                     : {'rpc': 'https://andromeda.metis.io/?owner=1088', 'scan': 'https://andromeda-explorer.metis.io', 'token': "METIS", 'chain_id': 1088},
 
     Chain.MOONBEAM                  : {'rpc': 'https://rpc.ankr.com/moonbeam', 'scan': 'https://moonscan.io/tx/', 'token': 'GLMR', 'chain_id': 1284},
@@ -56,6 +58,7 @@ stargate_ids = {
     Chain.BSC: 102,
     Chain.CELO: 125,
     Chain.GNOSIS: 145,
+    Chain.MANTLE: 181,
     Chain.METIS: 151,
     Chain.POLYGON: 109,
     Chain.FANTOM: 112,
@@ -74,14 +77,6 @@ chain_ids = {
     Chain.OP_BNB: 116,
     Chain.COMBO: 114,
     Chain.CELO: 18
-}
-
-ids = {
-    Chain.BSC: 56,
-    Chain.POLYGON: 137,
-    Chain.CORE: 1116,
-    Chain.OP_BNB: 5611,
-    Chain.FANTOM: 6
 }
        
 dst_addresses = {
@@ -105,33 +100,30 @@ nft_bridge_addresses = {
     Chain.BSC:                  '0xE09828f0DA805523878Be66EA2a70240d312001e',
     Chain.POLYGON:              '0x2E953a70C37E8CB4553DAe1F5760128237c8820D',
     Chain.CORE:                 '0x5c5979832a60c17bb06676fa906bedd1a013e18c',
-    Chain.CELO:                 '0x24339b7f8d303527C8681382AbD4Ec299757aF63'
+    Chain.CELO:                 '0x24339b7f8d303527C8681382AbD4Ec299757aF63',
+    Chain.MANTLE:               '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7'
 }
 
 nft_lz_bridge_addresses = {
     Chain.BSC:                  '0x3668c325501322CEB5a624E95b9E16A019cDEBe8',
     Chain.POLYGON:              '0xffdf4fe05899c4bdb1676e958fa9f21c19ecb9d5',
     Chain.CORE:                 '0x3701c5897710f16f1f75c6eae258bf11ee189a5d',
-    Chain.CELO:                 '0xe47b0a5F2444F9B360Bd18b744B8D511CfBF98c6'
+    Chain.CELO:                 '0xe47b0a5F2444F9B360Bd18b744B8D511CfBF98c6',
+    Chain.MANTLE:               '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7'
 }
 
 nft_claim_addresses = {
     Chain.BSC:                  '0xe9AD444cF80E1d6Ba062A2Dd6f53b740b5F0aa14',
     Chain.POLYGON:              '0xa25bE50be65070c2Ad96d5eD639061de31c45e12',
     Chain.CORE:                 '0x4AbC491f1f41B13C552Bb1C769F9459563130851',
-    Chain.OP_BNB:               '0x4CC870C8fDfBC512943FE60c29c98d515f868EBF'
+    Chain.OP_BNB:               '0x4CC870C8fDfBC512943FE60c29c98d515f868EBF',
+    Chain.MANTLE:               '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7'
 }
 
 sender_msgs = {
     Chain.BSC:                  '0xfd3f4d96378072db0862a6f76cc258c2b7ea36cc',
     Chain.POLYGON:              '0xdB6fb08DD8Ce406DA8Ff53FAe65Bd374e3d68681',
     Chain.CELO:                 '0x468Bd5792543b47aaeF12C16E668E7Fd3Fe05872'
-}
-
-native = {
-    Chain.BSC:                  'bnb',
-    Chain.POLYGON:              'matic',
-    Chain.CELO:                 'celo'
 }
 
 nfts_addresses = {

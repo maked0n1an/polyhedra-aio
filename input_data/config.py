@@ -16,13 +16,15 @@ PANDRA_CODECONQUEROR_BRIDGE     = Chain.BSC, Chain.CORE
 PANDRA_PIXELBROWLER_BRIDGE      = Chain.POLYGON, Chain.CORE
 PANDRA_MELODYMAVEN_BRIDGE       = Chain.CORE, Chain.POLYGON
 PANDRA_ECOGUARDIAN_BRIDGE       = Chain.CELO, Chain.POLYGON
+PANDRA_MANTLE_BRIDGE            = Chain.BSC, Chain.MANTLE
 MAINNET_ALPHA_NFT_CORE_BRIDGE   = Chain.CORE, Chain.POLYGON
 BSC_POLYGON_ZKMESSENGER         = Chain.BSC, Chain.ARBITRUM_NOVA
 BNB_CHAIN_LUBAN_NFT_BRIDGE      = Chain.BSC, [Chain.POLYGON, Chain.CELO, Chain.CORE]
 ZK_LIGHT_CLIENT_NFT_BRIDGE      = Chain.BSC, [Chain.POLYGON, Chain.CORE, Chain.CELO]
 
+
 # Нужно ли мешать кошельки? | Да - 1, Нет - 0
-IS_SHUFFLE_KEYS = 0
+IS_SHUFFLE_KEYS = 1
 
 # Количество кошельков для одновременного запуска, т.е если у вас 100 кошельков, и вы выбрали число 5,
 # то скрипт поделит ваши кошельки на 20 частей по 5 кошельков которые будут запущены одновременно

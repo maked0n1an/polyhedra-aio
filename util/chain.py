@@ -13,6 +13,7 @@ class Chain():
     HARMONY =           'harmony'
     KLAYTN =            'klaytn'
     METIS =             'metis'
+    MANTLE =            'mantle'
     MOONBEAM =          'mbeam'
     MOONRIVER =         'moonriver'
     OP_BNB =            'op_bnb'
