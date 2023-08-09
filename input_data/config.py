@@ -16,7 +16,7 @@ PANDRA_CODECONQUEROR_BRIDGE     = Chain.BSC, Chain.CORE
 PANDRA_PIXELBROWLER_BRIDGE      = Chain.POLYGON, Chain.CORE
 PANDRA_MELODYMAVEN_BRIDGE       = Chain.CORE, Chain.POLYGON
 PANDRA_ECOGUARDIAN_BRIDGE       = Chain.CELO, Chain.POLYGON
-PANDRA_MANTLE_BRIDGE            = Chain.BSC, Chain.MANTLE
+PANDRA_MANTLE_BRIDGE            = Chain.POLYGON, Chain.MANTLE
 MAINNET_ALPHA_NFT_CORE_BRIDGE   = Chain.CORE, Chain.POLYGON
 BSC_POLYGON_ZKMESSENGER         = Chain.BSC, Chain.ARBITRUM_NOVA
 BNB_CHAIN_LUBAN_NFT_BRIDGE      = Chain.BSC, [Chain.POLYGON, Chain.CELO, Chain.CORE]
@@ -32,7 +32,7 @@ WALLETS_IN_BATCH = 5
 
 # INITIAL_DELAY отвечает за начальную задержку между кошельками, нужна для одновременного запуска несколька кошелей, смотри wallets_in_batch выше
 # рекомендую не менять для максимального рандома
-INITIAL_DELAY = (1000, 3000)
+INITIAL_DELAY = (100, 3000)
 
 # перерыв между действиями
 DELAY = (30, 100)
