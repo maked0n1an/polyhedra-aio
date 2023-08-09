@@ -81,6 +81,7 @@ async def do_pandra_mantle_operations(private_key, wallet_name, proxy):
         nft='Pandra',
         proxy=proxy)
     zk.logger.info(f'{wallet_name} | Запущен минт и бридж Pandra в Mantle')
+    await zk.bridge_nft()
 
 async def do_alpha_nft_core_dao_operations(private_key, wallet_name, proxy):
     zk = ZkBridge(private_key=private_key,
