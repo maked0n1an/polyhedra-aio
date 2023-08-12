@@ -1,4 +1,5 @@
 import asyncio
+import random
 from loguru import logger
 
 from input_data.config import *
@@ -6,7 +7,7 @@ from modules.zk_bridge import ZkBridge
 from modules.zk_message import ZkMessage
 from util.chain import Chain
 from util.activity import Activity
-
+from util.data import legendary_panda_config
 
 
 async def do_greenfield_mint_nft(private_key, wallet_name, proxy):
@@ -125,3 +126,32 @@ async def do_zk_light_client_operations(private_key, wallet_name, proxy):
 
     zk.logger.info(f'{wallet_name} | Запущен минт и бридж ZkLightClient NFT')
     await zk.bridge_nft()
+
+async def do_legendary_panda_operations(private_key, wallet_name, proxy):
+    config_copy = legendary_panda_config.copy()
+    random.shuffle(config_copy)
+
+    for chain in config_copy:
+        if(len(chain) == 1):
+            zk = ZkBridge(private_key=private_key,
+                wallet_name=wallet_name,
+                chain=chain[0],
+                to_chain=None,
+                nft='Pandra',
+                proxy=proxy)
+            
+            zk.logger.info(f'{wallet_name} | Запущен минт {zk.nft}: {chain[0]}')
+            await zk.mint()
+        elif(len(chain) == 2):
+            zk = ZkBridge(private_key=private_key,
+                wallet_name=wallet_name,
+                chain=chain[0],
+                to_chain=chain[1],
+                nft='Pandra',
+                proxy=proxy)
+            
+            zk.logger.info(f'{wallet_name} | Запущен минт и бридж {zk.nft}: {chain[0]} -> {chain[1]}')
+            await zk.bridge_nft()
+        else:
+            logger.error('Incorrect config for Legendary Panda Grind! Please check data.py')
+            return

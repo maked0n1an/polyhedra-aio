@@ -4,7 +4,7 @@ class Chain():
     AVALANCHE =         'avalanche'
     BSC =               'bsc'
     CELO =              'celo'
-    COMBO =             'combo'
+    COMBO_TESTNET  =    'combo'
     CORE =              'core'
     DFK =               'dfk'
     ETH =               'eth'

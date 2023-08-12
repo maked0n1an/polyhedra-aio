@@ -36,7 +36,8 @@ async def run_wallet(wallet_name, private_key, proxy, i):
         Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
         Activity.BSC_POLYGON_ZKMESSENGER,
         Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
-        Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS
+        Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS,
+        Activity.LEGENDARY_PANDA_GRIND_OPERATIONS
     ]
 
     random.shuffle(activities_list)
@@ -80,7 +81,11 @@ async def run_activity(activity: Activity, wallet_name, private_key, proxy):
 
     if activity == Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS:
         await do_zk_light_client_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
+    
+    if activity == Activity.LEGENDARY_PANDA_GRIND_OPERATIONS:
+        await do_legendary_panda_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy)
 
+    
 async def main():
     if MORALIS_API_KEY == '':
         logger.error("Don't imported Moralis API key!...")

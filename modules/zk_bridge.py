@@ -31,7 +31,7 @@ class ZkBridge(Help):
         self.address = self.account.address
         self.nft = random.choice(nft) if type(nft) == list else nft
         self.nft_address = nfts_addresses[self.nft][self.chain]
-        self.bridge_address = nft_lz_bridge_addresses[self.chain] if self.nft == 'Pandra' and self.to_chain != Chain.COMBO else nft_bridge_addresses[self.chain]
+        self.bridge_address = nft_lz_bridge_addresses[self.chain] if self.nft == 'Pandra' and self.to_chain not in (Chain.COMBO_TESTNET, Chain.OP_BNB) else nft_bridge_addresses[self.chain]
         self.moralisapi = MORALIS_API_KEY
         self.proxy = proxy or None
         self.logger = write_to_logs(self.wallet_name)
@@ -299,12 +299,12 @@ class ZkBridge(Help):
 
         async def bridge_():
             bridge = self.w3.eth.contract(address=Web3.to_checksum_address(self.bridge_address),
-                        abi=bridge_lz_abi if self.nft == 'Pandra' and self.to_chain != Chain.COMBO else bridge_abi)
+                        abi=bridge_lz_abi if self.nft == 'Pandra' and self.to_chain not in (Chain.COMBO_TESTNET, Chain.OP_BNB) else bridge_abi)
 
             self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - начинаю бридж "{self.nft}"[{id_}]...')
             while True:
                 try:
-                    if self.nft == 'Pandra' and self.to_chain != Chain.COMBO:
+                    if self.nft == 'Pandra' and self.to_chain not in (Chain.COMBO_TESTNET, Chain.OP_BNB):
                         nonce = await self.w3.eth.get_transaction_count(self.address)
                         await asyncio.sleep(2)
                         args = Web3.to_checksum_address(self.nft_address), id_, stargate_ids[
@@ -320,7 +320,6 @@ class ZkBridge(Help):
                         tx['gas'] = await self.w3.eth.estimate_gas(tx)
                     else:
                         to_chain = chain_ids[self.to_chain]
-                        # to_chain = DATA[self.to_chain]['chain_id'] #chain_ids[self.to]
                         fee = await bridge.functions.fee(to_chain).call()
                         enco = f'0x000000000000000000000000{self.address[2:]}'
                         nonce = await self.w3.eth.get_transaction_count(self.address)
@@ -345,6 +344,7 @@ class ZkBridge(Help):
                     hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
                     status = await self.check_status_tx(self.wallet_name, self.address, self.chain, hash)
                     await self.sleep_indicator(self.chain)
+                    
                     if status == 1:
                         self.logger.success(
                             f'{self.wallet_name} | {self.address} | {self.chain} - успешно бриджанул "{self.nft}"[{id_}] в {self.to_chain}: {scan}{self.w3.to_hex(hash)}...')
