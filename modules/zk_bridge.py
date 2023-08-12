@@ -130,45 +130,41 @@ class ZkBridge(Help):
             return False
 
     async def balance_and_get_id(self):
-        if self.chain not in [Chain.CORE, Chain.CELO]:
-            try:
-                api_key = self.moralisapi
-                params = {
-                    "chain": self.chain, #if u have problem here, check https://docs.moralis.io/web3-data-api/evm/reference/wallet-api/get-nfts-by-wallet
-                    "format": "decimal",
-                    "token_addresses": [
-                        self.nft_address
-                    ],
-                    "media_items": False,
-                    "address": self.address}
-
-                result = evm_api.nft.get_wallet_nfts(api_key=api_key, params=params)
-
-                id_ = int(result['result'][0]['token_id'])
-                if id_:
-                    self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - успешно найдена "{self.nft}"[{id_}]')
-                    return id_
-            except Exception as e:
-                if 'list index out of range' in str(e):
-                    self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
-                    return None
-                else:
-                    self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
-        else:
-            try:
-                contract = self.w3.eth.contract(address=self.nft_address, abi=zk_nft_abi)
-                balance = await contract.functions.balanceOf(self.address).call()
-                if balance > 0:
-                    totalSupply = await contract.functions.totalSupply().call()
-                    id_ = (await contract.functions.tokensOfOwnerIn(self.address, totalSupply - 500, totalSupply).call())[
-                        0]
-                    return id_
-                else:
-                    self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
-                    return None
-            except Exception as e:
+        try:
+            token_id = await self.check_nft_presence(self.w3, self.nft_address, self.address, zk_nft_abi)
+            return token_id  
+        except Exception as e:
+            if 'list index out of range' in str(e):
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
+                return None
+            else:
                 self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
-                await asyncio.sleep(1)
+        # if self.chain not in [Chain.CORE, Chain.CELO]:
+        #     try:
+        #         api_key = self.moralisapi
+        #         params = {
+        #             "chain": self.chain, #if u have problem here, check https://docs.moralis.io/web3-data-api/evm/reference/wallet-api/get-nfts-by-wallet
+        #             "format": "decimal",
+        #             "token_addresses": [
+        #                 self.nft_address
+        #             ],
+        #             "media_items": False,
+        #             "address": self.address}
+
+        #         result = evm_api.nft.get_wallet_nfts(api_key=api_key, params=params)
+
+        #         id_ = int(result['result'][0]['token_id'])
+        #         if id_:
+        #             self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - успешно найдена "{self.nft}"[{id_}]')
+        #             return id_  
+        #     except Exception as e:
+        #         if 'list index out of range' in str(e):
+        #             self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
+        #             return None
+        #         else:
+        #             self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')         
+        # else:
+                                
 
     async def mint(self):
         while True:

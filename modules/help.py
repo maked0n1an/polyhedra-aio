@@ -50,3 +50,22 @@ class Help:
             tx['gasPrice'] = await self.w3.eth.gas_price
 
         return tx
+
+    async def check_nft_presence(self, w3, nft_address, account_address, nft_abi):
+        try:
+            contract = self.w3.eth.contract(address=self.nft_address, abi=nft_abi)
+            balance = await contract.functions.balanceOf(self.address).call()
+            if balance > 0:
+                totalSupply = await contract.functions.totalSupply().call()
+                id_ = (await contract.functions.tokensOfOwnerIn(self.address, totalSupply - 1000, totalSupply).call())[0]
+                self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - успешно найдена \'{self.nft}\'[{id_}]')
+                return id_
+            else:
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
+                return None
+        except Exception as e:
+            if 'list index out of range' in str(e):
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
+                return None
+            else:
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
