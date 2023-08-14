@@ -39,13 +39,13 @@ class ZkBridge(Help):
         self.proxy = proxy or None
         self.logger = write_to_logs(self.wallet_name)
 
-    async def auth(self):
+    def _setup_headers_and_useragent():
         ua = UserAgent()
         ua = ua.random
         headers = {
             'authority': 'api.zkbridge.com',
             'accept': 'application/json, text/plain, */*',
-            'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+            'accept-language': 'hu-HU,hu;q=0.9,en-US;q=0.8,en;q=0.7',
             'content-type': 'application/json',
             'origin': 'https://zkbridge.com',
             'referer': 'https://zkbridge.com/',
@@ -57,6 +57,11 @@ class ZkBridge(Help):
             'sec-fetch-site': 'same-site',
             'user-agent': ua,
         }
+
+        return ua, headers
+
+    async def auth(self):
+        ua, headers = self._setup_headers_and_useragent()
 
         json_data = {
             'publicKey': self.address.lower(),
@@ -76,109 +81,15 @@ class ZkBridge(Help):
                                 'publicKey': self.address,
                                 'signedMessage': signature,
                             }
-                            return signature, ua
+                            return signature, ua, headers
             except Exception as e:
                 self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}')
                 await asyncio.sleep(5)
 
-    async def claim_nft(self, sender_tx_hash):
-        # time_ = random.randint(DELAY[0], DELAY[1])
-        time_ = 1
-        self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
-        await asyncio.sleep(time_)
-
-        headers = await self.profile()
-        if headers is None:
-            return False
-        
-        json_data = {
-            'tx_hash': sender_tx_hash,
-            'chain_id': chain_ids[self.chain]
-        }
-
-        response = requests.post(
-            'https://api.zkbridge.com/api/v2/receipt_proof/generate',
-            headers=headers,
-            json=json_data
-        )
-
-        src_chain_id = json.loads(response.text)['chain_id']
-        src_block_hash = json.loads(response.text)['block_hash']
-        log_index = json.loads(response.text)['proof_index']
-        mpt_proof = json.loads(response.text)['proof_blob']
-
-        self.w3 = Web3(Web3.HTTPProvider(DATA[self.to_chain]['rpc']))
-        # self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.to_chain]['rpc']),
-        #             modules={'eth': (AsyncEth,)}, middlewares=[])
-
-        self.account = self.w3.eth.account.from_key(self.private_key)
-        self.address = self.account.address
-        # script_dir = os.path.dirname(os.path.abspath(__file__))
-        # project_root = os.path.dirname(script_dir)
-        # abi_path = os.path.join(project_root, 'util', 'validate_abi.json')
-
-        # abi_validate = json.load(open(abi_path))
-
-        claim_address = self.w3.to_checksum_address(nft_claim_addresses[self.to_chain])
-        claim_contract = self.w3.eth.contract(address=claim_address, abi=claim_abi)
-
-        try:
-            nonce = self.w3.eth.get_transaction_count(self.address)
-            chain_id = DATA[self.to_chain]['chain_id']
-            tx = claim_contract.functions.validateTransactionProof(src_chain_id, src_block_hash, log_index, mpt_proof
-                                                                ).build_transaction({
-                'from': self.address,
-                'gasPrice': self.w3.eth.gas_price,
-                'chainId': chain_id,
-                'nonce': nonce
-            })
-
-            #gasLimit = ww3.eth.estimate_gas(txn)
-            #txn['gas'] = int(gasLimit * 1.3)
-            self.logger.info(f'{self.wallet_name} | {self.address} | {self.to_chain} - начался клейм "{self.nft}"...')
-            signed_tx = self.w3.eth.account.sign_transaction(tx, private_key=self.private_key)
-            tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-            scan = DATA[self.to_chain]['scan']
-            # status = await self.check_status_tx(self.wallet_name, self.address, self.to_chain, tx_hash)
-            # if status == 1:
-            self.logger.success(f'{self.wallet_name} | {self.address} | {self.to_chain} - успешно заклеймил "{self.nft}": {scan}{self.w3.to_hex(tx_hash)}...')
-        except Exception as e:
-            error = str(e)
-            if 'nonce too low' in error or 'already known' in error:
-                self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - ошибка при минте, пробую еще раз...')
-                await asyncio.sleep(10)
-                await self.mint()
-            if 'INTERNAL_ERROR: insufficient funds' in error or 'insufficient funds for gas * price + value' in error:
-                self.logger.error(
-                    f'{self.wallet_name} | {self.address} | {self.chain} - не хватает денег на газ, заканчиваю работу через 5 секунд...')
-                await asyncio.sleep(5)
-                return False
-            elif 'Each address may claim one NFT only. You have claimed already' in error:
-                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - "{self.nft}" можно клеймить только один раз!...')
-                return False
-            else:
-                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
-                return False
-
     async def sign(self):
         # sign msg
-        signature, ua = await self.auth()
-        headers = {
-            'authority': 'api.zkbridge.com',
-            'accept': 'application/json, text/plain, */*',
-            'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
-            'content-type': 'application/json',
-            'origin': 'https://zkbridge.com',
-            'referer': 'https://zkbridge.com/',
-            'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-site',
-            'user-agent': ua,
-        }
-
+        signature, ua, headers = await self.auth()
+        
         json_data = {
             'publicKey': self.address.lower(),
             'signedMessage': signature,
@@ -310,6 +221,84 @@ class ZkBridge(Help):
                     self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
                     return False
 
+    async def claim_nft(self, sender_tx_hash):
+        # time_ = random.randint(DELAY[0], DELAY[1])
+        time_ = 1
+        self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
+        await asyncio.sleep(time_)
+
+        headers = await self.profile()
+        if headers is None:
+            return False
+        
+        json_data = {
+            'tx_hash': sender_tx_hash,
+            'chain_id': chain_ids[self.chain]
+        }
+
+        response = requests.post(
+            'https://api.zkbridge.com/api/v2/receipt_proof/generate',
+            headers=headers,
+            json=json_data
+        )
+
+        src_chain_id = json.loads(response.text)['chain_id']
+        src_block_hash = json.loads(response.text)['block_hash']
+        log_index = json.loads(response.text)['proof_index']
+        mpt_proof = json.loads(response.text)['proof_blob']
+
+        self.w3 = Web3(Web3.HTTPProvider(DATA[self.to_chain]['rpc']))
+        # self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.to_chain]['rpc']),
+        #             modules={'eth': (AsyncEth,)}, middlewares=[])
+
+        self.account = self.w3.eth.account.from_key(self.private_key)
+        self.address = self.account.address
+        # script_dir = os.path.dirname(os.path.abspath(__file__))
+        # project_root = os.path.dirname(script_dir)
+        # abi_path = os.path.join(project_root, 'util', 'validate_abi.json')
+
+        # abi_validate = json.load(open(abi_path))
+
+        claim_address = self.w3.to_checksum_address(nft_claim_addresses[self.to_chain])
+        claim_contract = self.w3.eth.contract(address=claim_address, abi=claim_abi)
+
+        try:
+            nonce = self.w3.eth.get_transaction_count(self.address)
+            chain_id = DATA[self.to_chain]['chain_id']
+            tx = claim_contract.functions.validateTransactionProof(src_chain_id, src_block_hash, log_index, mpt_proof
+                                                                ).build_transaction({
+                'from': self.address,
+                'gasPrice': self.w3.eth.gas_price,
+                'chainId': chain_id,
+                'nonce': nonce
+            })
+
+            #gasLimit = ww3.eth.estimate_gas(txn)
+            #txn['gas'] = int(gasLimit * 1.3)
+            self.logger.info(f'{self.wallet_name} | {self.address} | {self.to_chain} - начался клейм "{self.nft}"...')
+            signed_tx = self.w3.eth.account.sign_transaction(tx, private_key=self.private_key)
+            tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+            scan = DATA[self.to_chain]['scan']
+            # status = await self.check_status_tx(self.wallet_name, self.address, self.to_chain, tx_hash)
+            # if status == 1:
+            self.logger.success(f'{self.wallet_name} | {self.address} | {self.to_chain} - успешно заклеймил "{self.nft}": {scan}{self.w3.to_hex(tx_hash)}...')
+        except Exception as e:
+            error = str(e)
+            if 'nonce too low' in error or 'already known' in error:
+                self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - ошибка при минте, пробую еще раз...')
+                await asyncio.sleep(10)
+                await self.mint()
+            if 'INTERNAL_ERROR: insufficient funds' in error or 'insufficient funds for gas * price + value' in error:
+                self.logger.error(
+                    f'{self.wallet_name} | {self.address} | {self.chain} - не хватает денег на газ, заканчиваю работу через 5 секунд...')
+                await asyncio.sleep(5)
+                return False
+            elif 'Each address may claim one NFT only. You have claimed already' in error:
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - "{self.nft}" можно клеймить только один раз!...')
+                return False
+            else:
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
+                return False
 
     async def bridge_nft(self):
         time_ = random.randint(DELAY[0], DELAY[1])
