@@ -132,17 +132,8 @@ async def do_legendary_panda_operations(private_key, wallet_name, proxy):
     random.shuffle(config_copy)
 
     for chain in config_copy:
-        if(len(chain) == 1):
-            zk = ZkBridge(private_key=private_key,
-                wallet_name=wallet_name,
-                chain=chain[0],
-                to_chain=None,
-                nft='Pandra',
-                proxy=proxy)
-            
-            zk.logger.info(f'{wallet_name} | Запущен минт {zk.nft}: {chain[0]}')
-            await zk.mint()
-        elif(len(chain) == 2):
+        if(len(chain) == 2):
+
             zk = ZkBridge(private_key=private_key,
                 wallet_name=wallet_name,
                 chain=chain[0],
@@ -151,7 +142,10 @@ async def do_legendary_panda_operations(private_key, wallet_name, proxy):
                 proxy=proxy)
             
             zk.logger.info(f'{wallet_name} | Запущен минт и бридж {zk.nft}: {chain[0]} -> {chain[1]}')
-            await zk.bridge_nft()
+            # tx_hash = await zk.bridge_nft()
+            # await zk.mint()
+            if chain[1] in (Chain.COMBO_TESTNET, Chain.OP_BNB):
+                await zk.claim_nft('0x80e6281fba7044e2fa4e7c45815c47107d6d3855a25f97ff7b7b4b5cfaae14c1')
         else:
             logger.error('Incorrect config for Legendary Panda Grind! Please check data.py')
             return

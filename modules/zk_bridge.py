@@ -1,8 +1,11 @@
 import json
+import time
 import random
 import asyncio
 import aiohttp
+import requests
 import copy
+import os
 
 from web3 import Web3
 from loguru import logger
@@ -77,6 +80,78 @@ class ZkBridge(Help):
             except Exception as e:
                 self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}')
                 await asyncio.sleep(5)
+
+    async def claim_nft(self, tx_hash):
+        # time_ = random.randint(DELAY[0], DELAY[1])
+        time_ = 1
+        self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
+        await asyncio.sleep(time_)
+
+        headers = await self.profile()
+        if headers is None:
+            return False
+        
+        json_data = {
+            'tx_hash': tx_hash,
+            'chain_id': chain_ids[self.chain]
+        }
+
+        response = requests.post(
+            'https://api.zkbridge.com/api/v2/receipt_proof/generate',
+            headers=headers,
+            json=json_data
+        )
+
+        src_chain_id = json.loads(response.text)['chain_id']
+        src_block_hash = json.loads(response.text)['block_hash']
+        log_index = json.loads(response.text)['proof_index']
+        mpt_proof = json.loads(response.text)['proof_blob']
+
+        # script_dir = os.path.dirname(os.path.abspath(__file__))
+        # project_root = os.path.dirname(script_dir)
+        # abi_path = os.path.join(project_root, 'util', 'validate_abi.json')
+
+        # abi_validate = json.load(open(abi_path))
+
+        claim_add = self.w3.to_checksum_address(nft_bridge_addresses[self.chain])
+        claim_contract = self.w3.eth.contract(address=claim_add, abi=claim_abi)
+
+        try:
+            nonce = await self.w3.eth.get_transaction_count(self.address)
+            chain_id = DATA[self.chain]['chain_id']
+            tx = await claim_contract.functions.validateTransactionProof(src_chain_id, src_block_hash, log_index, mpt_proof
+                                                                ).build_transaction({
+                'from': self.address,
+                'gasPrice': await self.w3.eth.gas_price,
+                'chainId': chain_id,
+                'nonce': nonce
+            })
+
+            #gasLimit = ww3.eth.estimate_gas(txn)
+            #txn['gas'] = int(gasLimit * 1.3)
+            self.logger.info(f'{self.wallet_name} | {self.address} | {self.to_chain} - начался клейм "{self.nft}"...')
+            signed_tx = self.account.sign_transaction(tx)
+            tx_hash = await self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+            status = await self.check_status_tx(tx_hash)
+            if status == 1:
+                self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - успешно заклеймил "{self.nft}": {scan}{self.w3.to_hex(tx_hash)}...')
+        except Exception as e:
+            error = str(e)
+            if 'nonce too low' in error or 'already known' in error:
+                self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - ошибка при минте, пробую еще раз...')
+                await asyncio.sleep(10)
+                await self.mint()
+            if 'INTERNAL_ERROR: insufficient funds' in error or 'insufficient funds for gas * price + value' in error:
+                self.logger.error(
+                    f'{self.wallet_name} | {self.address} | {self.chain} - не хватает денег на газ, заканчиваю работу через 5 секунд...')
+                await asyncio.sleep(5)
+                return False
+            elif 'Each address may claim one NFT only. You have claimed already' in error:
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - "{self.nft}" можно клеймить только один раз!...')
+                return False
+            else:
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
+                return False
 
     async def sign(self):
         # sign msg
@@ -163,8 +238,7 @@ class ZkBridge(Help):
         #             return None
         #         else:
         #             self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')         
-        # else:
-                                
+        # else:                     
 
     async def mint(self):
         while True:
@@ -191,12 +265,12 @@ class ZkBridge(Help):
 
                 self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - начался минт "{self.nft}"...')
                 sign = self.account.sign_transaction(tx)
-                hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
-                status = await self.check_status_tx(self.wallet_name, self.address, self.chain, hash)
+                tx_hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
+                status = await self.check_status_tx(self.wallet_name, self.address, self.chain, tx_hash)
                 await self.sleep_indicator(self.chain)
                 if status == 1:
                     self.logger.success(
-                        f'{self.wallet_name} | {self.address} | {self.chain} - успешно заминтил "{self.nft}" : {scan}{self.w3.to_hex(hash)}...')
+                        f'{self.wallet_name} | {self.address} | {self.chain} - успешно заминтил "{self.nft}" : {scan}{self.w3.to_hex(tx_hash)}...')
                     await self.sleep_indicator(self.chain)
                     return headers
                 else:
@@ -219,6 +293,7 @@ class ZkBridge(Help):
                 else:
                     self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
                     return False
+
 
     async def bridge_nft(self):
         time_ = random.randint(DELAY[0], DELAY[1])
@@ -267,12 +342,12 @@ class ZkBridge(Help):
 
                     self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - начинаю апрув "{self.nft}"[{id_}]...')
                     sign = self.account.sign_transaction(tx)
-                    hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
-                    status = await self.check_status_tx(self.wallet_name, self.address, self.chain, hash)
+                    tx_hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
+                    status = await self.check_status_tx(self.wallet_name, self.address, self.chain, tx_hash)
                     await self.sleep_indicator(self.chain)
                     if status == 1:
                         self.logger.success(
-                            f'{self.wallet_name} | {self.address} | {self.chain} - успешно апрувнул "{self.nft}"[{id_}] : {scan}{self.w3.to_hex(hash)}...')
+                            f'{self.wallet_name} | {self.address} | {self.chain} - успешно апрувнул "{self.nft}"[{id_}] : {scan}{self.w3.to_hex(tx_hash)}...')
                         await self.sleep_indicator(self.chain)
                         return True
                     else:
@@ -337,15 +412,15 @@ class ZkBridge(Help):
                     scan = DATA[self.chain]['scan']
 
                     sign = self.account.sign_transaction(tx)
-                    hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
-                    status = await self.check_status_tx(self.wallet_name, self.address, self.chain, hash)
+                    tx_hash = await self.w3.eth.send_raw_transaction(sign.rawTransaction)
+                    status = await self.check_status_tx(self.wallet_name, self.address, self.chain, tx_hash)
                     await self.sleep_indicator(self.chain)
                     
                     if status == 1:
                         self.logger.success(
-                            f'{self.wallet_name} | {self.address} | {self.chain} - успешно бриджанул "{self.nft}"[{id_}] в {self.to_chain}: {scan}{self.w3.to_hex(hash)}...')
+                            f'{self.wallet_name} | {self.address} | {self.chain} - успешно бриджанул "{self.nft}"[{id_}] в {self.to_chain}: {scan}{self.w3.to_hex(tx_hash)}...')
                         await self.sleep_indicator(self.chain)
-                        return self.private_key, self.address, f'successfully bridged "{self.nft}" to {self.to_chain}'
+                        return str(tx_hash)
                     else:
                         self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пробую бриджить еще раз...')
                         await bridge_()
