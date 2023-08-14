@@ -39,7 +39,7 @@ class ZkBridge(Help):
         self.proxy = proxy or None
         self.logger = write_to_logs(self.wallet_name)
 
-    def _setup_headers_and_useragent():
+    def _setup_headers_and_useragent(self):
         ua = UserAgent()
         ua = ua.random
         headers = {

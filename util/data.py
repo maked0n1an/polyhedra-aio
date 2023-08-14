@@ -51,29 +51,29 @@ DATA = {
 ''' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ За этой линией не менять ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'''
 
 bridge_pandra_config = [
-    # # [Chain.BSC, Chain.POLYGON],
-    # # [Chain.BSC, Chain.CORE],
-    # # [Chain.BSC, Chain.CELO],
-    # [Chain.BSC, Chain.COMBO_TESTNET],
-    # [Chain.BSC, Chain.OP_BNB],
-    # ########################
-    # [Chain.POLYGON, Chain.BSC],
-    # # [Chain.POLYGON, Chain.CORE],
-    # [Chain.POLYGON, Chain.CELO],
+    [Chain.BSC, Chain.POLYGON],
+    [Chain.BSC, Chain.CORE],
+    [Chain.BSC, Chain.CELO],
+    [Chain.BSC, Chain.COMBO_TESTNET],
+    [Chain.BSC, Chain.OP_BNB],
+    #######################
+    [Chain.POLYGON, Chain.BSC],
+    [Chain.POLYGON, Chain.CORE],
+    [Chain.POLYGON, Chain.CELO],
     [Chain.POLYGON, Chain.COMBO_TESTNET],
-    # [Chain.POLYGON, Chain.OP_BNB],
-    # ########################
-    # [Chain.CORE, Chain.BSC],
-    # # [Chain.CORE, Chain.POLYGON],
-    # # [Chain.CORE, Chain.POLYGON, Chain.CELO],
-    # [Chain.CORE, Chain.COMBO_TESTNET],
-    # [Chain.CORE, Chain.OP_BNB],
-    # ######################### 
-    # [Chain.CELO, Chain.BSC],   
-    # # [Chain.CELO, Chain.POLYGON],
-    # [Chain.CELO, Chain.POLYGON, Chain.CORE],    
-    # [Chain.CELO, Chain.COMBO_TESTNET],
-    # [Chain.CELO, Chain.OP_BNB],
+    [Chain.POLYGON, Chain.OP_BNB],
+    #######################
+    [Chain.CORE, Chain.BSC],
+    [Chain.CORE, Chain.POLYGON],
+    [Chain.CORE, Chain.POLYGON, Chain.CELO],
+    [Chain.CORE, Chain.COMBO_TESTNET],
+    [Chain.CORE, Chain.OP_BNB],
+    ######################## 
+    [Chain.CELO, Chain.BSC],   
+    [Chain.CELO, Chain.POLYGON],
+    [Chain.CELO, Chain.POLYGON, Chain.CORE],    
+    [Chain.CELO, Chain.COMBO_TESTNET],
+    [Chain.CELO, Chain.COMBO_TESTNET],
 ]
 
 mint_pandra_config = [
@@ -108,7 +108,7 @@ chain_ids = {
     Chain.MOONBEAM: 9,
     Chain.ARBITRUM_NOVA: 14,
     Chain.OP_BNB: 116,
-    Chain.COMBO_TESTNET: 114,
+    Chain.COMBO_TESTNET: 120,
     Chain.CELO: 18
 }
        
