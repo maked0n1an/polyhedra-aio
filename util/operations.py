@@ -142,10 +142,12 @@ async def do_legendary_panda_operations(private_key, wallet_name, proxy):
                 proxy=proxy)
             
             zk.logger.info(f'{wallet_name} | Запущен минт и бридж {zk.nft}: {chain[0]} -> {chain[1]}')
-            # tx_hash = await zk.bridge_nft()
-            # await zk.mint()
+            tx_hash = await zk.bridge_nft()
+            # # await zk.mint()
+            # tx_hash = ''
             if chain[1] in (Chain.COMBO_TESTNET, Chain.OP_BNB):
-                await zk.claim_nft('0x80e6281fba7044e2fa4e7c45815c47107d6d3855a25f97ff7b7b4b5cfaae14c1')
+                zk.logger.info(f'{wallet_name} | Запущен клейм {zk.nft} в {chain[1]}')
+                await zk.claim_nft(tx_hash)
         else:
             logger.error('Incorrect config for Legendary Panda Grind! Please check data.py')
             return

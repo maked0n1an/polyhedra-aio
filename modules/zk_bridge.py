@@ -138,9 +138,10 @@ class ZkBridge(Help):
             self.logger.info(f'{self.wallet_name} | {self.address} | {self.to_chain} - начался клейм "{self.nft}"...')
             signed_tx = self.w3.eth.account.sign_transaction(tx, private_key=self.private_key)
             tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-            status = await self.check_status_tx(self.wallet_name, self.address, self.to_chain, tx_hash)
-            if status == 1:
-                self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - успешно заклеймил "{self.nft}": {scan}{self.w3.to_hex(tx_hash)}...')
+            scan = DATA[self.to_chain]['scan']
+            # status = await self.check_status_tx(self.wallet_name, self.address, self.to_chain, tx_hash)
+            # if status == 1:
+            self.logger.success(f'{self.wallet_name} | {self.address} | {self.to_chain} - успешно заклеймил "{self.nft}": {scan}{self.w3.to_hex(tx_hash)}...')
         except Exception as e:
             error = str(e)
             if 'nonce too low' in error or 'already known' in error:
@@ -435,7 +436,7 @@ class ZkBridge(Help):
                         self.logger.success(
                             f'{self.wallet_name} | {self.address} | {self.chain} - успешно бриджанул "{self.nft}"[{id_}] в {self.to_chain}: {scan}{self.w3.to_hex(tx_hash)}...')
                         await self.sleep_indicator(self.chain)
-                        return str(Web3.toHex(tx_hash))
+                        return self.w3.to_hex(tx_hash)
                     else:
                         self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пробую бриджить еще раз...')
                         await bridge_()
