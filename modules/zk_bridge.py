@@ -81,7 +81,7 @@ class ZkBridge(Help):
                 self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}')
                 await asyncio.sleep(5)
 
-    async def claim_nft(self, tx_hash):
+    async def claim_nft(self, sender_tx_hash):
         # time_ = random.randint(DELAY[0], DELAY[1])
         time_ = 1
         self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
@@ -92,7 +92,7 @@ class ZkBridge(Help):
             return False
         
         json_data = {
-            'tx_hash': tx_hash,
+            'tx_hash': sender_tx_hash,
             'chain_id': chain_ids[self.chain]
         }
 
@@ -107,18 +107,23 @@ class ZkBridge(Help):
         log_index = json.loads(response.text)['proof_index']
         mpt_proof = json.loads(response.text)['proof_blob']
 
+        self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.to_chain]['rpc']),
+                    modules={'eth': (AsyncEth,)}, middlewares=[])
+
+        self.account = self.w3.eth.account.from_key(self.private_key)
+        self.address = self.account.address
         # script_dir = os.path.dirname(os.path.abspath(__file__))
         # project_root = os.path.dirname(script_dir)
         # abi_path = os.path.join(project_root, 'util', 'validate_abi.json')
 
         # abi_validate = json.load(open(abi_path))
 
-        claim_add = self.w3.to_checksum_address(nft_bridge_addresses[self.chain])
-        claim_contract = self.w3.eth.contract(address=claim_add, abi=claim_abi)
+        claim_address = self.w3.to_checksum_address(nft_claim_addresses[self.to_chain])
+        claim_contract = self.w3.eth.contract(address=claim_address, abi=claim_abi)
 
         try:
             nonce = await self.w3.eth.get_transaction_count(self.address)
-            chain_id = DATA[self.chain]['chain_id']
+            chain_id = DATA[self.to_chain]['chain_id']
             tx = await claim_contract.functions.validateTransactionProof(src_chain_id, src_block_hash, log_index, mpt_proof
                                                                 ).build_transaction({
                 'from': self.address,
@@ -132,7 +137,7 @@ class ZkBridge(Help):
             self.logger.info(f'{self.wallet_name} | {self.address} | {self.to_chain} - начался клейм "{self.nft}"...')
             signed_tx = self.account.sign_transaction(tx)
             tx_hash = await self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-            status = await self.check_status_tx(tx_hash)
+            status = await self.check_status_tx(self.wallet_name, self.address, self.to_chain, tx_hash)
             if status == 1:
                 self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - успешно заклеймил "{self.nft}": {scan}{self.w3.to_hex(tx_hash)}...')
         except Exception as e:
