@@ -435,7 +435,7 @@ class ZkBridge(Help):
                         self.logger.success(
                             f'{self.wallet_name} | {self.address} | {self.chain} - успешно бриджанул "{self.nft}"[{id_}] в {self.to_chain}: {scan}{self.w3.to_hex(tx_hash)}...')
                         await self.sleep_indicator(self.chain)
-                        return str(tx_hash)
+                        return str(Web3.toHex(tx_hash))
                     else:
                         self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пробую бриджить еще раз...')
                         await bridge_()
