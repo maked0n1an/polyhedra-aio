@@ -26,8 +26,8 @@ activities_list = [
         Activity.LEGENDARY_PANDA_GRIND_OPERATIONS
     ]
 
-# Доступные маршруты гринда: 'uncommon' | 'rare' | 'epic' | 'legendary'
-PANDRA_GRIND_ROUTE = 'uncommon'
+# Доступные маршруты гринда: 'Uncommon' | 'Rare' | 'Epic' | 'Legendary'
+PANDRA_GRIND_ROUTE = 'Uncommon'
 
 # Нужно ли мешать кошельки? | Да - 1, Нет - 0
 IS_SHUFFLE_KEYS = 1

@@ -70,13 +70,13 @@ async def run_activity(activity: Activity, wallet_name, private_key, proxy):
     if activity == Activity.LEGENDARY_PANDA_GRIND_OPERATIONS:
         route_for_grind = []
         
-        if PANDRA_GRIND_ROUTE == 'uncommon':
+        if PANDRA_GRIND_ROUTE == 'Uncommon':
             route_for_grind = uncommon_pandra_config
-        elif PANDRA_GRIND_ROUTE == 'rare':
+        elif PANDRA_GRIND_ROUTE == 'Rare':
             route_for_grind = rare_pandra_config
-        elif PANDRA_GRIND_ROUTE == 'epic':
+        elif PANDRA_GRIND_ROUTE == 'Epic':
             route_for_grind = epic_pandra_config
-        elif PANDRA_GRIND_ROUTE == 'legendary':
+        elif PANDRA_GRIND_ROUTE == 'Legendary':
             route_for_grind = legendary_pandra_config    
 
         logger.info(f'Запущен гринд {PANDRA_GRIND_ROUTE} Tier Pandra')
