@@ -50,31 +50,57 @@ DATA = {
 
 ''' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ За этой линией не менять ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'''
 
-bridge_pandra_config = [
-    [Chain.BSC, Chain.POLYGON],
-    [Chain.BSC, Chain.CORE],
-    [Chain.BSC, Chain.CELO],
-    [Chain.BSC, Chain.COMBO_TESTNET],
-    [Chain.BSC, Chain.OP_BNB],
-    #######################
-    [Chain.POLYGON, Chain.BSC],
-    [Chain.POLYGON, Chain.CORE],
-    [Chain.POLYGON, Chain.CELO],
-    [Chain.POLYGON, Chain.COMBO_TESTNET],
-    [Chain.POLYGON, Chain.OP_BNB],
-    #######################
-    [Chain.CORE, Chain.BSC],
-    [Chain.CORE, Chain.POLYGON],
-    [Chain.CORE, Chain.POLYGON, Chain.CELO],
-    [Chain.CORE, Chain.COMBO_TESTNET],
-    [Chain.CORE, Chain.OP_BNB],
-    ######################## 
-    [Chain.CELO, Chain.BSC],   
-    [Chain.CELO, Chain.POLYGON],
-    [Chain.CELO, Chain.POLYGON, Chain.CORE],    
-    [Chain.CELO, Chain.COMBO_TESTNET],
-    [Chain.CELO, Chain.COMBO_TESTNET],
+legendary_pandra_config = [
+    [Chain.BSC, Chain.POLYGON],                 # ~$1.06
+    [Chain.BSC, Chain.CORE],                    # ~$0.67
+    [Chain.BSC, Chain.CELO],                    # ~$0.6
+    [Chain.BSC, Chain.COMBO_TESTNET],           # ~$0.4
+    [Chain.BSC, Chain.OP_BNB],                  # ~$0.29
+    #######################                     # ~$
+    [Chain.POLYGON, Chain.BSC],                 # ~$1.39    
+    [Chain.POLYGON, Chain.CORE],                # ~$0.50
+    [Chain.POLYGON, Chain.CELO],                # ~$0.47
+    [Chain.POLYGON, Chain.COMBO_TESTNET],       # ~$0.35
+    [Chain.POLYGON, Chain.OP_BNB],              # ~$0.41
+    #######################                     # ~$
+    [Chain.CORE, Chain.BSC],                    # ~$2.34
+    [Chain.CORE, Chain.POLYGON],                # ~$0.89
+    [Chain.CORE, Chain.POLYGON, Chain.CELO],    # ~$0.89 + $0.42 ~ $1.31
+    [Chain.CORE, Chain.COMBO_TESTNET],          # ~$0.43
+    [Chain.CORE, Chain.OP_BNB],                 # ~$0.43
+    ########################                    # ~$
+    [Chain.CELO, Chain.BSC],                    # ~$2.35
+    [Chain.CELO, Chain.POLYGON],                # ~$0.85
+    [Chain.CELO, Chain.POLYGON, Chain.CORE],    # ~$0.89 + $0.5 ~ $1.39   
+    [Chain.CELO, Chain.COMBO_TESTNET],          # ~$0.51
+    [Chain.CELO, Chain.OP_BNB],                 # ~$0.51
 ]
+
+epic_pandra_config = [
+    [Chain.BSC, Chain.OP_BNB],                    
+    # [Chain.BSC, Chain.POLYGON],                           
+    # [Chain.BSC, Chain.CORE],                                                
+    # [Chain.BSC, Chain.CELO],                                  
+    [Chain.BSC, Chain.COMBO_TESTNET],                              
+    # #######################                   
+    # [Chain.POLYGON, Chain.BSC],                               
+    # [Chain.POLYGON, Chain.CORE],              
+    # [Chain.POLYGON, Chain.CELO],              
+    [Chain.POLYGON, Chain.COMBO_TESTNET],                   
+    [Chain.POLYGON, Chain.OP_BNB],                  
+    # #######################                   
+    # [Chain.CORE, Chain.BSC],                  
+    # [Chain.CORE, Chain.POLYGON],              
+    # [Chain.CORE, Chain.POLYGON, Chain.CELO],              
+    [Chain.CORE, Chain.COMBO_TESTNET],              
+    [Chain.CORE, Chain.OP_BNB],                 
+    # ########################                  
+    # [Chain.CELO, Chain.BSC],                  
+    # [Chain.CELO, Chain.POLYGON],              
+    # [Chain.CELO, Chain.POLYGON, Chain.CORE],                    
+    # [Chain.CELO, Chain.COMBO_TESTNET],                
+    # [Chain.CELO, Chain.COMBO_TESTNET],                
+]# ~
 
 mint_pandra_config = [
     Chain.CORE, Chain.CELO, Chain.POLYGON, Chain.BSC, Chain.OP_BNB 
