@@ -60,11 +60,11 @@ class Help:
                 self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - успешно найдена \'{self.nft}\'[{id_}]')
                 return id_
             else:
-                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
+                self.logger.warning(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
                 return None
         except Exception as e:
             if 'list index out of range' in str(e):
-                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
+                self.logger.warning(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
                 return None
             else:
                 self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
