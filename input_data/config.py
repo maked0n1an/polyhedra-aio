@@ -1,3 +1,4 @@
+from util.activity import Activity
 from util.chain import Chain
 
 '''

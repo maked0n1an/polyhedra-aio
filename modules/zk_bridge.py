@@ -217,50 +217,50 @@ class ZkBridge(Help):
         self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
         await asyncio.sleep(time_)
 
-        ua = UserAgent()
-        ua = ua.random
-        headers = {
-            'authority': 'api.zkbridge.com',
-            'accept': 'application/json, text/plain, */*',
-            'accept-language': 'hu-HU,hu;q=0.9,en-US;q=0.8,en;q=0.7',
-            'content-type': 'application/json',
-            'origin': 'https://zkbridge.com',
-            'referer': 'https://zkbridge.com/',
-            'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-site',
-            'user-agent': ua,
-        }
-        
-        json_data = {
-            'tx_hash': sender_tx_hash,
-            'chain_id': chain_ids[self.chain]
-        }
-
-        response = requests.post(
-            'https://api.zkbridge.com/api/v2/receipt_proof/generate',
-            headers=headers,
-            json=json_data
-        )
-
-        src_chain_id = json.loads(response.text)['chain_id']
-        src_block_hash = json.loads(response.text)['block_hash']
-        log_index = json.loads(response.text)['proof_index']
-        mpt_proof = json.loads(response.text)['proof_blob']
-
-        self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.to_chain]['rpc']),
-                    modules={'eth': (AsyncEth,)}, middlewares=[])
-
-        self.account = self.w3.eth.account.from_key(self.private_key)
-        self.address = self.account.address
-
-        claim_address = self.w3.to_checksum_address(nft_claim_addresses[self.to_chain])
-        claim_contract = self.w3.eth.contract(address=claim_address, abi=claim_abi)
-
         try:
+            ua = UserAgent()
+            ua = ua.random
+            headers = {
+                'authority': 'api.zkbridge.com',
+                'accept': 'application/json, text/plain, */*',
+                'accept-language': 'hu-HU,hu;q=0.9,en-US;q=0.8,en;q=0.7',
+                'content-type': 'application/json',
+                'origin': 'https://zkbridge.com',
+                'referer': 'https://zkbridge.com/',
+                'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-site',
+                'user-agent': ua,
+            }
+            
+            json_data = {
+                'tx_hash': sender_tx_hash,
+                'chain_id': chain_ids[self.chain]
+            }
+
+            response = requests.post(
+                'https://api.zkbridge.com/api/v2/receipt_proof/generate',
+                headers=headers,
+                json=json_data
+            )
+
+            src_chain_id = json.loads(response.text)['chain_id']
+            src_block_hash = json.loads(response.text)['block_hash']
+            log_index = json.loads(response.text)['proof_index']
+            mpt_proof = json.loads(response.text)['proof_blob']
+
+            self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.to_chain]['rpc']),
+                        modules={'eth': (AsyncEth,)}, middlewares=[])
+
+            self.account = self.w3.eth.account.from_key(self.private_key)
+            self.address = self.account.address
+
+            claim_address = self.w3.to_checksum_address(nft_claim_addresses[self.to_chain])
+            claim_contract = self.w3.eth.contract(address=claim_address, abi=claim_abi)
+
             nonce = await self.w3.eth.get_transaction_count(self.address)
             chain_id = DATA[self.to_chain]['chain_id']
 
