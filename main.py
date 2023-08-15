@@ -25,21 +25,6 @@ async def run_wallet(wallet_name, private_key, proxy, i):
     logger.success(f"Current proxy  ({i}/{len(PROXIES)}): {only_ip_proxy}")
     logger.success(f"Current wallet ({i}/{len(PRIVATE_KEYS)}): {wallet_name} | {address}")
 
-    activities_list = [
-        Activity.GREENFIELD_TESTNET_MINT,
-        Activity.OP_BNB_OPERATIONS,
-        Activity.PANDRA_CODECONQUEROR_OPERATIONS,
-        Activity.PANDRA_PIXELBROWLER_OPERATIONS,
-        Activity.PANDRA_MELODYMAVEN_OPERATIONS,
-        Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
-        Activity.PANDRA_MANTLE_OPERATIONS,
-        Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
-        Activity.BSC_POLYGON_ZKMESSENGER,
-        Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
-        Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS,
-        Activity.LEGENDARY_PANDA_GRIND_OPERATIONS
-    ]
-
     random.shuffle(activities_list)
 
     await Help.sleep_initial_indicator(wallet_name, address)
@@ -83,7 +68,19 @@ async def run_activity(activity: Activity, wallet_name, private_key, proxy):
         await do_zk_light_client_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy) 
     
     if activity == Activity.LEGENDARY_PANDA_GRIND_OPERATIONS:
-        await do_legendary_panda_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy)
+        route_for_grind = []
+        
+        if PANDRA_GRIND_ROUTE == 'uncommon':
+            route_for_grind = uncommon_pandra_config
+        elif PANDRA_GRIND_ROUTE == 'rare':
+            route_for_grind = rare_pandra_config
+        elif PANDRA_GRIND_ROUTE == 'epic':
+            route_for_grind = epic_pandra_config
+        elif PANDRA_GRIND_ROUTE == 'legendary':
+            route_for_grind = legendary_pandra_config    
+
+        logger.info(f'Запущен гринд {PANDRA_GRIND_ROUTE} Tier Pandra')
+        await do_pandra_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy, grind_list=route_for_grind)
 
     
 async def main():
@@ -126,7 +123,7 @@ async def main():
 if __name__ == "__main__":
     authors = ["@1liochka1", "@maked0n1an"]
     random.shuffle(authors)
-    art = text2art(text="DropBot", font="standart")
+    art = text2art(text="Polyhedra AIO", font="standart")
     print(colored(art, "cyan"))
     print(colored(f"Authors: {authors[0]}, {authors[1]}\n", "cyan"))
         
