@@ -15,11 +15,11 @@ from util.chain import Chain
 activities_list = [
         # Activity.GREENFIELD_TESTNET_MINT,
         # Activity.OP_BNB_OPERATIONS,
-        # Activity.PANDRA_CODECONQUEROR_OPERATIONS,
-        # Activity.PANDRA_PIXELBROWLER_OPERATIONS,
-        # Activity.PANDRA_MELODYMAVEN_OPERATIONS,
-        # Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
-        # Activity.PANDRA_MANTLE_OPERATIONS,
+        Activity.PANDRA_CODECONQUEROR_OPERATIONS,
+        Activity.PANDRA_PIXELBROWLER_OPERATIONS,
+        Activity.PANDRA_MELODYMAVEN_OPERATIONS,
+        Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
+        Activity.PANDRA_MANTLE_OPERATIONS,
         # Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
         # Activity.BSC_POLYGON_ZKMESSENGER,
         # Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
@@ -44,8 +44,11 @@ INITIAL_DELAY = (100, 3000)
 # перерыв между действиями
 DELAY = (30, 100)
 
+# для клейма NFT, отправленных с polygon или core
+BIG_DELAY = 250 
+
 # moralis api key - https://admin.moralis.io/login идем сюда и получаем апи ключ, НУЖЕН DEFAULT KEY!, нужно для нахождения id нфт
-MORALIS_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjEwNzg2NDU4LWEyMWUtNDU3Mi1hNTU2LWI0OWE0ZTJhZTU3YyIsIm9yZ0lkIjoiMzQ0MTM2IiwidXNlcklkIjoiMzUzNzY3IiwidHlwZUlkIjoiNjY4MDVjNTQtMzlmYS00OGQ1LTgyMDItY2EwMjkzNmJiNzQ2IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2ODcxMDk4MTUsImV4cCI6NDg0Mjg2OTgxNX0.6Sgw7i3Fl_5JRYV6_2Sz2SFDLp-i26xK4nPWzmcEWaQ'
+MORALIS_API_KEY = ''
 
 # cколько максимум секунд скрипт будет ждать подтверждения транзакции
 MAX_WAIT_TIME = 150

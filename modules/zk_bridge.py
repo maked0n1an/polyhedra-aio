@@ -214,6 +214,10 @@ class ZkBridge(Help):
 
     async def claim_nft(self, sender_tx_hash):
         time_ = random.randint(DELAY[0], DELAY[1])
+
+        if self.to_chain == Chain.POLYGON | self.to_chain == Chain.CORE:
+            time = BIG_DELAY           
+
         self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
         await asyncio.sleep(time_)
 
@@ -293,13 +297,16 @@ class ZkBridge(Help):
                 self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - ошибка при минте, пробую еще раз...')
                 await asyncio.sleep(10)
                 await self.mint()
-            if 'INTERNAL_ERROR: insufficient funds' in error or 'insufficient funds for gas * price + value' in error:
+            elif 'INTERNAL_ERROR: insufficient funds' in error or 'insufficient funds for gas * price + value' in error:
                 self.logger.error(
                     f'{self.wallet_name} | {self.address} | {self.chain} - не хватает денег на газ, заканчиваю работу через 5 секунд...')
                 await asyncio.sleep(5)
                 return False
             elif 'Each address may claim one NFT only. You have claimed already' in error:
                 self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - "{self.nft}" можно клеймить только один раз!...')
+                return False
+            elif 'chain_id' in error:
+                self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - "{self.nft}" не клеймим, ибо смотреть ошибку при бридже выше...')
                 return False
             else:
                 self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
