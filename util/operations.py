@@ -1,4 +1,5 @@
 import asyncio
+import random
 from loguru import logger
 
 from input_data.config import *
@@ -6,8 +7,7 @@ from modules.zk_bridge import ZkBridge
 from modules.zk_message import ZkMessage
 from util.chain import Chain
 from util.activity import Activity
-
-
+from util.data import nfts_addresses
 
 async def do_greenfield_mint_nft(private_key, wallet_name, proxy):
     zk = ZkBridge(wallet_name=wallet_name,
@@ -125,3 +125,57 @@ async def do_zk_light_client_operations(private_key, wallet_name, proxy):
 
     zk.logger.info(f'{wallet_name} | Запущен минт и бридж ZkLightClient NFT')
     await zk.bridge_nft()
+
+async def do_pandra_operations(private_key, wallet_name, proxy, grind_list):
+    bridge_pandra_copy = grind_list.copy()
+    mint_config_copy = mint_pandra_config.copy()
+
+    random.shuffle(bridge_pandra_copy)
+    random.shuffle(mint_config_copy)
+
+    for chain in bridge_pandra_copy:
+        if(len(chain) == 2):
+            zk = ZkBridge(private_key=private_key,
+                wallet_name=wallet_name,
+                chain=chain[0],
+                to_chain=chain[1],
+                nft='Pandra',
+                proxy=proxy)
+            
+            zk.logger.info(f'{wallet_name} | Запущен минт и бридж {zk.nft}: {chain[0]} -> {chain[1]}')
+            tx_hash = await zk.bridge_nft()
+            
+            if chain[1] in (Chain.COMBO_TESTNET, Chain.OP_BNB):
+                zk.logger.info(f'{wallet_name} | Запущен клейм {zk.nft} в {chain[1]}')
+                await zk.claim_nft(tx_hash)
+        elif(len(chain) == 3):
+            zk = ZkBridge(private_key=private_key,
+                wallet_name=wallet_name,
+                chain=chain[0],
+                to_chain=chain[1],
+                nft='Pandra',
+                proxy=proxy)
+            
+            zk.logger.info(f'{wallet_name} | Запущен минт и бридж {zk.nft}: {chain[0]} -> {chain[1]} -> {chain[2]}')
+            await zk.bridge_nft()
+            
+            zk.nft = 'Bridged Pandra'
+            zk.chain = chain[0]
+            zk.nft_address = nfts_addresses[zk.nft][zk.chain]
+            zk.chain = chain[1]
+            zk.to_chain = chain[2]
+            zk.logger.info(f'{wallet_name} | Запущен бридж {zk.nft}({chain[0]}): {chain[1]} -> {chain[2]}')
+            await zk.bridge_nft()            
+        else:
+            logger.error('Incorrect config for Legendary Panda Grind! Please check data.py')
+            return
+
+    for mint_chain in mint_config_copy:
+        zk = ZkBridge(private_key=private_key,
+                wallet_name=wallet_name,
+                chain=mint_chain,
+                to_chain=None,
+                nft='Pandra',
+                proxy=proxy)
+        zk.logger.info(f'{wallet_name} | Запущен минт {zk.nft}: {mint_chain}')
+        await zk.mint()    
