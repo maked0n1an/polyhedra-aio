@@ -34,8 +34,7 @@ class Help:
         logger.info(f'{wallet_name} | {address} - пауза в виде {secs} секунд...')
         await asyncio.sleep(secs)
 
-    async def sleep_indicator(self, chain):
-        secs = 5
+    async def sleep_indicator(self, chain, secs=5):
         logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - жду {secs} секунд...')
         await asyncio.sleep(secs)
 
@@ -57,7 +56,7 @@ class Help:
             balance = await contract.functions.balanceOf(self.address).call()
             if balance > 0:
                 totalSupply = await contract.functions.totalSupply().call()
-                id_ = (await contract.functions.tokensOfOwnerIn(self.address, totalSupply - 1000, totalSupply).call())[0]
+                id_ = (await contract.functions.tokensOfOwnerIn(self.address, totalSupply - 2000, totalSupply).call())[0]
                 self.logger.success(f'{self.wallet_name} | {self.address} | {self.chain} - успешно найдена \'{self.nft}\'[{id_}]')
                 return id_
             else:

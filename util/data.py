@@ -1,7 +1,7 @@
 from util.chain import Chain
 
 
-# Меняем рпс на свои
+# Меняем рпс на свои (если надо)
 DATA = {    
     Chain.ARBITRUM                  : {'rpc': 'https://rpc.ankr.com/arbitrum', 'scan': 'https://arbiscan.io/tx/', 'token': 'ETH', 'chain_id': 42161},    
 
@@ -10,6 +10,8 @@ DATA = {
     Chain.AVALANCHE                 : {'rpc': 'https://rpc.ankr.com/avalanche', 'scan': 'https://snowtrace.io/tx/', 'token': 'AVAX', 'chain_id': 43114},  
 
     Chain.BSC                       : {'rpc': 'https://rpc.ankr.com/bsc', 'scan': 'https://bscscan.com/tx/', 'token': 'BNB', 'chain_id': 56},
+
+    Chain.BSC_TESTNET               : {'rpc': 'https://data-seed-prebsc-1-s1.binance.org:8545', 'scan': 'https://testnet.bscscan.com', 'token': 'tBNB', 'chain_id': 97},
 
     Chain.CELO                      : {'rpc': 'https://rpc.ankr.com/celo', 'scan': 'https://celoscan.io/tx/', 'token': 'CELO', 'chain_id': 42220},
 
@@ -48,8 +50,6 @@ DATA = {
     Chain.ZK_SYNC                   : {'rpc': 'https://mainnet.era.zksync.io', 'scan': 'https://explorer.zksync.io/tx/', 'token': 'ETH', 'chain_id': 324},
 }
 
-''' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ За этой линией не менять ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'''
-
 legendary_pandra_config = [ # 20 bridges + 5 mints
     [Chain.BSC, Chain.POLYGON],                 # ~$1.06
     [Chain.BSC, Chain.CORE],                    # ~$0.67
@@ -77,54 +77,55 @@ legendary_pandra_config = [ # 20 bridges + 5 mints
 ]
 
 epic_pandra_config = [ # 15 bridges + 5 mints
-    ###############################################========================= ~$2
-    # [Chain.BSC, Chain.POLYGON],                 # ~$1.06
-    # [Chain.BSC, Chain.CORE],                    # ~$0.67
+    ###############################################========================= 
+    [Chain.BSC, Chain.POLYGON],                 # ~$1.06
+    [Chain.BSC, Chain.CORE],                    # ~$0.67
     [Chain.BSC, Chain.CELO],                    # ~$0.6
-    # [Chain.BSC, Chain.COMBO_TESTNET],           # ~$0.4
+    [Chain.BSC, Chain.COMBO_TESTNET],           # ~$0.4
     [Chain.BSC, Chain.OP_BNB],                  # ~$0.29
-    # #############################################========================= ~$2.6
-    # [Chain.POLYGON, Chain.BSC],                 # ~$1.39    
-    # [Chain.POLYGON, Chain.CORE],                # ~$0.50
+    #############################################=========================
+    [Chain.POLYGON, Chain.BSC],                 # ~$1.39    
+    [Chain.POLYGON, Chain.CORE],                # ~$0.50
     [Chain.POLYGON, Chain.CELO],                # ~$0.47
     [Chain.POLYGON, Chain.COMBO_TESTNET],       # ~$0.35
     [Chain.POLYGON, Chain.OP_BNB],              # ~$0.41
-    # [Chain.POLYGON, Chain.MANTLE],              # ~$0.83
-    # #############################################========================= ~$1.9
-    # [Chain.CORE, Chain.BSC],                    # ~$2.34
-    # [Chain.CORE, Chain.POLYGON],                # ~$0.89 + 
-    # [Chain.CORE, Chain.POLYGON, Chain.CELO],    # ~$0.89 + $0.42 ~ $1.31
+    [Chain.POLYGON, Chain.MANTLE],              # ~$0.83
+    #############################################=========================
+    [Chain.CORE, Chain.BSC],                    # ~$2.34
+    [Chain.CORE, Chain.POLYGON],                # ~$0.89 + 
+    [Chain.CORE, Chain.POLYGON, Chain.CELO],    # ~$0.89 + $0.42 ~ $1.31
     [Chain.CORE, Chain.COMBO_TESTNET],          # ~$0.43 + 
     [Chain.CORE, Chain.OP_BNB],                 # ~$0.43 + 
-    # #############################################========================= ~$1.9
+    #############################################========================= 
+    [Chain.BSC_TESTNET, Chain.OP_BNB],
     # [Chain.CELO, Chain.BSC],                    # ~$2.35
-    # [Chain.CELO, Chain.POLYGON],                # ~$0.85
-    # [Chain.CELO, Chain.POLYGON, Chain.CORE],    # ~$0.89 + $0.5 ~ $1.39   
+    [Chain.CELO, Chain.POLYGON],                # ~$0.85
+    [Chain.CELO, Chain.POLYGON, Chain.CORE],    # ~$0.89 + $0.5 ~ $1.39   
     [Chain.CELO, Chain.COMBO_TESTNET],          # ~$0.51
-    [Chain.CELO, Chain.OP_BNB],                 # ~$0.51           
+    [Chain.CELO, Chain.OP_BNB],                 # ~$0.51
 ]
 
 epic_pandra_config_1 = [ # 15 bridges + 5 mints
-    ###############################################========================= ~$2
+    #############################################========================= ~$2
     # [Chain.BSC, Chain.POLYGON],                 # ~$1.06
     [Chain.BSC, Chain.CORE],                    # ~$0.67
     [Chain.BSC, Chain.CELO],                    # ~$0.6
     [Chain.BSC, Chain.COMBO_TESTNET],           # ~$0.4
     [Chain.BSC, Chain.OP_BNB],                  # ~$0.29
-    # #############################################========================= ~$2.6
+    #############################################========================= ~$2.6
     # [Chain.POLYGON, Chain.BSC],                 # ~$1.39    
     [Chain.POLYGON, Chain.CORE],                # ~$0.50
     [Chain.POLYGON, Chain.CELO],                # ~$0.47
     [Chain.POLYGON, Chain.COMBO_TESTNET],       # ~$0.35
     [Chain.POLYGON, Chain.OP_BNB],              # ~$0.41
     [Chain.POLYGON, Chain.MANTLE],              # ~$0.83
-    # #############################################========================= ~$1.9
+    #############################################========================= ~$1.9
     # [Chain.CORE, Chain.BSC],                    # ~$2.34
     [Chain.CORE, Chain.POLYGON],                # ~$0.89 + 
     # [Chain.CORE, Chain.POLYGON, Chain.CELO],    # ~$0.89 + $0.42 ~ $1.31
     [Chain.CORE, Chain.COMBO_TESTNET],          # ~$0.43 + 
-    [Chain.CORE, Chain.OP_BNB],                 # ~$0.43 + 
-    # #############################################========================= ~$1.9
+    # [Chain.CORE, Chain.OP_BNB],                 # ~$0.43 + 
+    #############################################========================= ~$1.9
     # [Chain.CELO, Chain.BSC],                    # ~$2.35
     [Chain.CELO, Chain.POLYGON],                # ~$0.85
     # [Chain.CELO, Chain.POLYGON, Chain.CORE],    # ~$0.89 + $0.5 ~ $1.39   
@@ -133,25 +134,26 @@ epic_pandra_config_1 = [ # 15 bridges + 5 mints
 ]
 
 rare_pandra_config = [ # 10 bridges + 5 mints 
+    #############################################========================= 
     # [Chain.BSC, Chain.POLYGON],                 # ~$1.06
     # [Chain.BSC, Chain.CORE],                    # ~$0.67
     [Chain.BSC, Chain.CELO],                    # ~$0.6
     [Chain.BSC, Chain.COMBO_TESTNET],           # ~$0.4
     # [Chain.BSC, Chain.OP_BNB],                  # ~$0.29
-    # #######################                     # ~$
+    #############################################========================= 
     # [Chain.POLYGON, Chain.BSC],                 # ~$1.39    
     [Chain.POLYGON, Chain.CORE],                # ~$0.50
     [Chain.POLYGON, Chain.CELO],                # ~$0.47
     [Chain.POLYGON, Chain.COMBO_TESTNET],       # ~$0.35
     [Chain.POLYGON, Chain.OP_BNB],              # ~$0.41
     # [Chain.POLYGON, Chain.MANTLE],              # ~$0.83
-    # #######################                     # ~$
+    #############################################========================= 
     # [Chain.CORE, Chain.BSC],                    # ~$2.34
     # [Chain.CORE, Chain.POLYGON],                # ~$0.89
     # [Chain.CORE, Chain.POLYGON, Chain.CELO],    # ~$0.89 + $0.42 ~ $1.31
     [Chain.CORE, Chain.COMBO_TESTNET],          # ~$0.43
     [Chain.CORE, Chain.OP_BNB],                 # ~$0.43
-    # ########################                    # ~$
+    #############################################========================= 
     # [Chain.CELO, Chain.BSC],                    # ~$2.35
     # [Chain.CELO, Chain.POLYGON],                # ~$0.85
     # [Chain.CELO, Chain.POLYGON, Chain.CORE],    # ~$0.89 + $0.5 ~ $1.39   
@@ -160,25 +162,26 @@ rare_pandra_config = [ # 10 bridges + 5 mints
 ]
 
 uncommon_pandra_config = [ # 5 bridges + 5 mints 
+    #############################################========================= 
     # [Chain.BSC, Chain.POLYGON],                 # ~$1.06
     # [Chain.BSC, Chain.CORE],                    # ~$0.67
     # [Chain.BSC, Chain.CELO],                    # ~$0.6
     [Chain.BSC, Chain.COMBO_TESTNET],           # ~$0.4
     [Chain.BSC, Chain.OP_BNB],                  # ~$0.29
-    # #######################                     # ~$
+    #############################################========================= 
     # [Chain.POLYGON, Chain.BSC],                 # ~$1.39    
     # [Chain.POLYGON, Chain.CORE],                # ~$0.50
     # [Chain.POLYGON, Chain.CELO],                # ~$0.47
     [Chain.POLYGON, Chain.COMBO_TESTNET],       # ~$0.35
     [Chain.POLYGON, Chain.OP_BNB],              # ~$0.41
     # [Chain.POLYGON, Chain.MANTLE],              # ~$0.83
-    # #######################                     # ~$
+    #############################################========================= 
     # [Chain.CORE, Chain.BSC],                    # ~$2.34
     # [Chain.CORE, Chain.POLYGON],                # ~$0.89
     # [Chain.CORE, Chain.POLYGON, Chain.CELO],    # ~$0.89 + $0.42 ~ $1.31
     # [Chain.CORE, Chain.COMBO_TESTNET],          # ~$0.43
     [Chain.CORE, Chain.OP_BNB],                 # ~$0.43
-    # ########################                    # ~$
+    #############################################========================= 
     # [Chain.CELO, Chain.BSC],                    # ~$2.35
     # [Chain.CELO, Chain.POLYGON],                # ~$0.85
     # [Chain.CELO, Chain.POLYGON, Chain.CORE],    # ~$0.89 + $0.5 ~ $1.39   
@@ -187,7 +190,7 @@ uncommon_pandra_config = [ # 5 bridges + 5 mints
 ]
 
 mint_pandra_config = [
-    Chain.CORE, Chain.CELO, Chain.POLYGON, Chain.BSC, Chain.OP_BNB 
+    Chain.CORE, Chain.CELO, Chain.POLYGON, Chain.BSC, Chain.BSC_TESTNET 
 ]
 
 mailer_abi =                    '[{"inputs":[{"internalType":"address","name":"_zkBridgeEntrypoint","type":"address"},{"internalType":"address","name":"_lzEndpoint","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint64","name":"sequence","type":"uint64"},{"indexed":true,"internalType":"uint32","name":"dstChainId","type":"uint32"},{"indexed":true,"internalType":"address","name":"dstAddress","type":"address"},{"indexed":false,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"address","name":"recipient","type":"address"},{"indexed":false,"internalType":"string","name":"message","type":"string"}],"name":"LzMessageSend","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint64","name":"sequence","type":"uint64"},{"indexed":true,"internalType":"uint32","name":"dstChainId","type":"uint32"},{"indexed":true,"internalType":"address","name":"dstAddress","type":"address"},{"indexed":false,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"address","name":"recipient","type":"address"},{"indexed":false,"internalType":"string","name":"message","type":"string"}],"name":"MessageSend","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint16","name":"chainId","type":"uint16"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"NewFee","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"},{"indexed":false,"internalType":"bool","name":"zkBridgePaused","type":"bool"},{"indexed":false,"internalType":"bool","name":"layerZeroPaused","type":"bool"}],"name":"PauseSendAction","type":"event"},{"inputs":[],"name":"claimFees","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_dstChainId","type":"uint16"},{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"string","name":"_message","type":"string"}],"name":"estimateLzFee","outputs":[{"internalType":"uint256","name":"nativeFee","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"","type":"uint16"}],"name":"fees","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"_srcChainId","type":"uint16"},{"internalType":"bytes","name":"_srcAddress","type":"bytes"}],"name":"forceResumeReceive","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_version","type":"uint16"},{"internalType":"uint16","name":"_dstChainId","type":"uint16"},{"internalType":"uint256","name":"_configType","type":"uint256"}],"name":"getConfig","outputs":[{"internalType":"bytes","name":"","type":"bytes"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getSendVersion","outputs":[{"internalType":"uint16","name":"","type":"uint16"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"layerZeroPaused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lzEndpoint","outputs":[{"internalType":"contract ILayerZeroEndpoint","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"lzChainId","type":"uint16"},{"internalType":"address","name":"lzDstAddress","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"string","name":"message","type":"string"}],"name":"lzSendMessage","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"maxLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bool","name":"zkBridgePaused_","type":"bool"},{"internalType":"bool","name":"layerZeroPaused_","type":"bool"}],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"dstChainId","type":"uint16"},{"internalType":"address","name":"dstAddress","type":"address"},{"internalType":"uint16","name":"lzChainId","type":"uint16"},{"internalType":"address","name":"lzDstAddress","type":"address"},{"internalType":"uint256","name":"nativeFee","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"string","name":"message","type":"string"}],"name":"sendMessage","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_version","type":"uint16"},{"internalType":"uint16","name":"_dstChainId","type":"uint16"},{"internalType":"uint256","name":"_configType","type":"uint256"},{"internalType":"bytes","name":"_config","type":"bytes"}],"name":"setConfig","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_dstChainId","type":"uint16"},{"internalType":"uint256","name":"_fee","type":"uint256"}],"name":"setFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_maxLength","type":"uint256"}],"name":"setMsgLength","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_version","type":"uint16"}],"name":"setReceiveVersion","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_version","type":"uint16"}],"name":"setSendVersion","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"zkBridgeEntrypoint","outputs":[{"internalType":"contract IZKBridgeEntrypoint","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"zkBridgePaused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"dstChainId","type":"uint16"},{"internalType":"address","name":"dstAddress","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"string","name":"message","type":"string"}],"name":"zkSendMessage","outputs":[],"stateMutability":"payable","type":"function"}]'
@@ -196,6 +199,12 @@ bridge_abi =                    '[{"anonymous":false,"inputs":[{"indexed":false,
 zk_claim_abi =                  '[{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"previousAdmin","type":"address"},{"indexed":false,"internalType":"address","name":"newAdmin","type":"address"}],"name":"AdminChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"beacon","type":"address"}],"name":"BeaconUpgraded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"oldContract","type":"address"},{"indexed":true,"internalType":"address","name":"newContract","type":"address"}],"name":"ContractUpgraded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"uint16","name":"srcChainId","type":"uint16"},{"indexed":true,"internalType":"uint64","name":"sequence","type":"uint64"},{"indexed":false,"internalType":"address","name":"dstAddress","type":"address"},{"indexed":false,"internalType":"bytes","name":"payload","type":"bytes"}],"name":"ExecutedMessage","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"uint16","name":"dstChainId","type":"uint16"},{"indexed":true,"internalType":"uint64","name":"sequence","type":"uint64"},{"indexed":false,"internalType":"address","name":"dstAddress","type":"address"},{"indexed":false,"internalType":"bytes","name":"payload","type":"bytes"}],"name":"MessagePublished","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"pendingImplementation","type":"address"},{"indexed":true,"internalType":"address","name":"newImplementation","type":"address"}],"name":"NewPendingImplementation","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"implementation","type":"address"}],"name":"Upgraded","type":"event"},{"stateMutability":"payable","type":"fallback"},{"inputs":[],"name":"MESSAGE_TOPIC","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_LOCK_TIME","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"}],"name":"blockUpdater","outputs":[{"internalType":"contract IBlockUpdater","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"chainId","outputs":[{"internalType":"uint16","name":"","type":"uint16"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claimFees","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"confirmContractUpgrade","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"impl","type":"address"}],"name":"isInitialized","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"hash","type":"bytes32"}],"name":"isTransferCompleted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lockTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"}],"name":"mptVerifier","outputs":[{"internalType":"contract IMptVerifier","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"hash","type":"bytes32"}],"name":"nextSequence","outputs":[{"internalType":"uint64","name":"","type":"uint64"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pendingImplementation","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"},{"internalType":"bytes32","name":"bridgeContract","type":"bytes32"}],"name":"registerChain","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"dstChainId","type":"uint16"},{"internalType":"address","name":"dstAddress","type":"address"},{"internalType":"bytes","name":"payload","type":"bytes"}],"name":"send","outputs":[{"internalType":"uint64","name":"sequence","type":"uint64"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"},{"internalType":"address","name":"blockUpdater","type":"address"}],"name":"setBlockUpdater","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"lockTime","type":"uint256"}],"name":"setLockTime","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"},{"internalType":"address","name":"mptVerifier","type":"address"}],"name":"setMptVerifier","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newImplementation","type":"address"}],"name":"submitContractUpgrade","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"toUpdateTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"srcChainId","type":"uint16"},{"internalType":"bytes32","name":"srcBlockHash","type":"bytes32"},{"internalType":"uint256","name":"logIndex","type":"uint256"},{"internalType":"bytes","name":"mptProof","type":"bytes"}],"name":"validateTransactionProof","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"}],"name":"zkBridgeContracts","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}]'
 bridge_lz_abi =                 '[{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint8","name":"version","type":"uint8"}],"name":"Initialized","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint16","name":"_srcChainId","type":"uint16"},{"indexed":false,"internalType":"bytes","name":"_srcAddress","type":"bytes"},{"indexed":false,"internalType":"uint64","name":"_nonce","type":"uint64"},{"indexed":false,"internalType":"bytes","name":"_payload","type":"bytes"},{"indexed":false,"internalType":"bytes","name":"_reason","type":"bytes"}],"name":"MessageFailed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint64","name":"sequence","type":"uint64"},{"indexed":false,"internalType":"address","name":"sourceToken","type":"address"},{"indexed":false,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"uint256","name":"tokenID","type":"uint256"},{"indexed":false,"internalType":"uint16","name":"sourceChain","type":"uint16"},{"indexed":false,"internalType":"uint16","name":"sendChain","type":"uint16"},{"indexed":false,"internalType":"address","name":"recipient","type":"address"}],"name":"ReceiveNFT","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint16","name":"_srcChainId","type":"uint16"},{"indexed":false,"internalType":"bytes","name":"_srcAddress","type":"bytes"},{"indexed":false,"internalType":"uint64","name":"_nonce","type":"uint64"},{"indexed":false,"internalType":"bytes32","name":"_payloadHash","type":"bytes32"}],"name":"RetryMessageSuccess","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint16","name":"_dstChainId","type":"uint16"},{"indexed":false,"internalType":"uint16","name":"_type","type":"uint16"},{"indexed":false,"internalType":"uint256","name":"_minDstGas","type":"uint256"}],"name":"SetMinDstGas","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint16","name":"_remoteChainId","type":"uint16"},{"indexed":false,"internalType":"bytes","name":"_path","type":"bytes"}],"name":"SetTrustedRemote","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint16","name":"_remoteChainId","type":"uint16"},{"indexed":false,"internalType":"bytes","name":"_remoteAddress","type":"bytes"}],"name":"SetTrustedRemoteAddress","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint64","name":"sequence","type":"uint64"},{"indexed":false,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"uint256","name":"tokenID","type":"uint256"},{"indexed":false,"internalType":"uint16","name":"recipientChain","type":"uint16"},{"indexed":false,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"address","name":"recipient","type":"address"}],"name":"TransferNFT","type":"event"},{"inputs":[{"internalType":"bytes","name":"_encoded","type":"bytes"}],"name":"_parseTransfer","outputs":[{"components":[{"internalType":"address","name":"tokenAddress","type":"address"},{"internalType":"uint16","name":"tokenChain","type":"uint16"},{"internalType":"bytes32","name":"symbol","type":"bytes32"},{"internalType":"bytes32","name":"name","type":"bytes32"},{"internalType":"uint256","name":"tokenID","type":"uint256"},{"internalType":"string","name":"uri","type":"string"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint16","name":"toChain","type":"uint16"}],"internalType":"struct NFT721Bridge.Transfer721","name":"transfer","type":"tuple"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"uint16","name":"","type":"uint16"}],"name":"chainFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"chainId","outputs":[{"internalType":"uint16","name":"","type":"uint16"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claimFees","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"uint16","name":"_recipientChain","type":"uint16"},{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"bytes","name":"_adapterParams","type":"bytes"}],"name":"estimateFee","outputs":[{"internalType":"uint256","name":"fee","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"","type":"uint16"},{"internalType":"bytes","name":"","type":"bytes"},{"internalType":"uint64","name":"","type":"uint64"}],"name":"failedMessages","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"_srcChainId","type":"uint16"},{"internalType":"bytes","name":"_srcAddress","type":"bytes"}],"name":"forceResumeReceive","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_version","type":"uint16"},{"internalType":"uint16","name":"_chainId","type":"uint16"},{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"_configType","type":"uint256"}],"name":"getConfig","outputs":[{"internalType":"bytes","name":"","type":"bytes"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"_remoteChainId","type":"uint16"}],"name":"getTrustedRemoteAddress","outputs":[{"internalType":"bytes","name":"","type":"bytes"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"_chainId","type":"uint16"},{"internalType":"address","name":"_endpoint","type":"address"}],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_srcChainId","type":"uint16"},{"internalType":"bytes","name":"_srcAddress","type":"bytes"}],"name":"isTrustedRemote","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lzEndpoint","outputs":[{"internalType":"contract ILayerZeroEndpoint","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"_srcChainId","type":"uint16"},{"internalType":"bytes","name":"_srcAddress","type":"bytes"},{"internalType":"uint64","name":"_nonce","type":"uint64"},{"internalType":"bytes","name":"_payload","type":"bytes"}],"name":"lzReceive","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_srcChainId","type":"uint16"},{"internalType":"bytes","name":"_srcAddress","type":"bytes"},{"internalType":"uint64","name":"_nonce","type":"uint64"},{"internalType":"bytes","name":"_payload","type":"bytes"}],"name":"nonblockingLzReceive","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"bytes","name":"","type":"bytes"}],"name":"onERC721Received","outputs":[{"internalType":"bytes4","name":"","type":"bytes4"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_srcChainId","type":"uint16"},{"internalType":"bytes","name":"_srcAddress","type":"bytes"},{"internalType":"uint64","name":"_nonce","type":"uint64"},{"internalType":"bytes","name":"_payload","type":"bytes"}],"name":"retryMessage","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_version","type":"uint16"},{"internalType":"uint16","name":"_chainId","type":"uint16"},{"internalType":"uint256","name":"_configType","type":"uint256"},{"internalType":"bytes","name":"_config","type":"bytes"}],"name":"setConfig","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_dstChainId","type":"uint16"},{"internalType":"uint256","name":"_fee","type":"uint256"}],"name":"setFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_lzEndpoint","type":"address"}],"name":"setLzEndpoint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_version","type":"uint16"}],"name":"setReceiveVersion","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_version","type":"uint16"}],"name":"setSendVersion","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_srcChainId","type":"uint16"},{"internalType":"bytes","name":"_path","type":"bytes"}],"name":"setTrustedRemote","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_remoteChainId","type":"uint16"},{"internalType":"bytes","name":"_remoteAddress","type":"bytes"}],"name":"setTrustedRemoteAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_nativeChainId","type":"uint16"},{"internalType":"address","name":"_nativeContract","type":"address"},{"internalType":"address","name":"_wrapper","type":"address"}],"name":"setWrappedAsset","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"uint16","name":"_recipientChain","type":"uint16"},{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"bytes","name":"_adapterParams","type":"bytes"}],"name":"transferNFT","outputs":[{"internalType":"uint64","name":"sequence","type":"uint64"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"","type":"uint16"}],"name":"trustedRemoteLookup","outputs":[{"internalType":"bytes","name":"","type":"bytes"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"wrappedAssetData","outputs":[{"internalType":"uint16","name":"nativeChainId","type":"uint16"},{"internalType":"address","name":"nativeContract","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"","type":"uint16"},{"internalType":"address","name":"","type":"address"}],"name":"wrappedAssets","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}]'
 claim_abi =                     '[{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"previousAdmin","type":"address"},{"indexed":false,"internalType":"address","name":"newAdmin","type":"address"}],"name":"AdminChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"beacon","type":"address"}],"name":"BeaconUpgraded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"oldContract","type":"address"},{"indexed":true,"internalType":"address","name":"newContract","type":"address"}],"name":"ContractUpgraded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"uint16","name":"srcChainId","type":"uint16"},{"indexed":true,"internalType":"uint64","name":"sequence","type":"uint64"},{"indexed":false,"internalType":"address","name":"dstAddress","type":"address"},{"indexed":false,"internalType":"bytes","name":"payload","type":"bytes"}],"name":"ExecutedMessage","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"uint16","name":"dstChainId","type":"uint16"},{"indexed":true,"internalType":"uint64","name":"sequence","type":"uint64"},{"indexed":false,"internalType":"address","name":"dstAddress","type":"address"},{"indexed":false,"internalType":"bytes","name":"payload","type":"bytes"}],"name":"MessagePublished","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"pendingImplementation","type":"address"},{"indexed":true,"internalType":"address","name":"newImplementation","type":"address"}],"name":"NewPendingImplementation","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"implementation","type":"address"}],"name":"Upgraded","type":"event"},{"stateMutability":"payable","type":"fallback"},{"inputs":[],"name":"MESSAGE_TOPIC","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_LOCK_TIME","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"}],"name":"blockUpdater","outputs":[{"internalType":"contract IBlockUpdater","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"chainId","outputs":[{"internalType":"uint16","name":"","type":"uint16"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claimFees","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"confirmContractUpgrade","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"impl","type":"address"}],"name":"isInitialized","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isL2","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"hash","type":"bytes32"}],"name":"isTransferCompleted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"}],"name":"l2MessageReceive","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"l2MessageSend","outputs":[{"internalType":"contract IL2MessageSend","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lockTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"}],"name":"mptVerifier","outputs":[{"internalType":"contract IMptVerifier","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"hash","type":"bytes32"}],"name":"nextSequence","outputs":[{"internalType":"uint64","name":"","type":"uint64"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pendingImplementation","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"},{"internalType":"bytes32","name":"bridgeContract","type":"bytes32"}],"name":"registerChain","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"dstChainId","type":"uint16"},{"internalType":"address","name":"dstAddress","type":"address"},{"internalType":"bytes","name":"payload","type":"bytes"}],"name":"send","outputs":[{"internalType":"uint64","name":"sequence","type":"uint64"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint16","name":"srcChainId","type":"uint16"},{"internalType":"uint16","name":"dstChainId","type":"uint16"},{"internalType":"address","name":"dstAddress","type":"address"},{"internalType":"bytes","name":"payload","type":"bytes"}],"name":"sendFromL2","outputs":[{"internalType":"uint64","name":"sequence","type":"uint64"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"},{"internalType":"address","name":"blockUpdater","type":"address"}],"name":"setBlockUpdater","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"isL2","type":"bool"}],"name":"setL2","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"},{"internalType":"address","name":"l2MessageReceive","type":"address"}],"name":"setL2MessageReceive","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"l2MessageSend","type":"address"}],"name":"setL2MessageSend","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"lockTime","type":"uint256"}],"name":"setLockTime","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"},{"internalType":"address","name":"mptVerifier","type":"address"}],"name":"setMptVerifier","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newImplementation","type":"address"}],"name":"submitContractUpgrade","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"toUpdateTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"srcChainId","type":"uint16"},{"internalType":"address","name":"srcAddress","type":"address"},{"internalType":"address","name":"dstAddress","type":"address"},{"internalType":"uint64","name":"sequence","type":"uint64"},{"internalType":"bytes","name":"payload","type":"bytes"}],"name":"validateTransactionFromL2","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"srcChainId","type":"uint16"},{"internalType":"bytes32","name":"srcBlockHash","type":"bytes32"},{"internalType":"uint256","name":"logIndex","type":"uint256"},{"internalType":"bytes","name":"mptProof","type":"bytes"}],"name":"validateTransactionProof","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"chainId","type":"uint16"}],"name":"zkBridgeContracts","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}]'
+
+non_lz_chains = [
+    Chain.COMBO_TESTNET, 
+    Chain.OP_BNB,
+    Chain.BSC_TESTNET
+]
 
 stargate_ids = {
     Chain.BSC: 102,
@@ -212,6 +221,7 @@ stargate_ids = {
 
 chain_ids = {
     Chain.BSC: 3,
+    Chain.BSC_TESTNET: 103,
     Chain.POLYGON: 4,
     Chain.FANTOM: 6,
     Chain.CORE: 17,
@@ -240,21 +250,14 @@ lzdst_addresses = {
 }
 
 nft_bridge_addresses = {
-    Chain.BSC:                  '0xE09828f0DA805523878Be66EA2a70240d312001e',
-    Chain.POLYGON:              '0x2E953a70C37E8CB4553DAe1F5760128237c8820D',
-    Chain.CORE:                 '0x5c5979832a60c17bb06676fa906bedd1a013e18c',
-    Chain.CELO:                 '0x24339b7f8d303527C8681382AbD4Ec299757aF63',
-    Chain.COMBO_TESTNET:        '0xe09828f0da805523878be66ea2a70240d312001e',
-    Chain.MANTLE:               '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7',
-    Chain.OP_BNB:               '0xe09828f0da805523878be66ea2a70240d312001e'
-}
-
-nft_lz_bridge_addresses = {
-    Chain.BSC:                  '0x3668c325501322CEB5a624E95b9E16A019cDEBe8',
-    Chain.POLYGON:              '0xffdf4fe05899c4bdb1676e958fa9f21c19ecb9d5',
-    Chain.CORE:                 '0x3701c5897710f16f1f75c6eae258bf11ee189a5d',
-    Chain.CELO:                 '0xe47b0a5F2444F9B360Bd18b744B8D511CfBF98c6',
-    Chain.MANTLE:               '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7',
+    Chain.BSC:                  '0xE09828f0DA805523878Be66EA2a70240d312001e', # LZ_endpoint
+    Chain.POLYGON:              '0x2E953a70C37E8CB4553DAe1F5760128237c8820D', # LZ_endpoint  
+    Chain.CORE:                 '0x5c5979832a60c17bb06676fa906bedd1a013e18c', # LZ_endpoint  
+    Chain.CELO:                 '0x24339b7f8d303527C8681382AbD4Ec299757aF63', # LZ_endpoint  
+    Chain.MANTLE:               '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7', # LZ_endpoint  
+    Chain.COMBO_TESTNET:        '0xe09828f0da805523878be66ea2a70240d312001e',   
+    Chain.OP_BNB:               '0xe09828f0da805523878be66ea2a70240d312001e',   
+    Chain.BSC_TESTNET:          '0x5b2d3EcA3D64CE47A675317D1D290D9B8E87E8Dc',
 }
 
 nft_claim_addresses = {
@@ -297,7 +300,7 @@ nfts_addresses = {
         Chain.POLYGON:          '0x141A1fb33683C304DA7C3fe6fC6a49B5C0c2dC42',
         Chain.CORE:             '0x36e5121618c0Af89E81AcD33B6b8F5CF5cDD961a',
         Chain.CELO:             '0xb404e5233aB7E426213998C025f05EaBaBD41Da6',
-        Chain.OP_BNB:           '0x95A44287A6D208FA723A899D971d3976cA985ba6'
+        Chain.BSC_TESTNET:      '0x95A44287A6D208FA723A899D971d3976cA985ba6',
     },
 
     'Bridged Pandra': {

@@ -3,6 +3,7 @@ class Chain():
     ARBITRUM_NOVA =     'nova'
     AVALANCHE =         'avalanche'
     BSC =               'bsc'
+    BSC_TESTNET =       'bsc testnet'
     CELO =              'celo'
     COMBO_TESTNET  =    'combo'
     CORE =              'core'
