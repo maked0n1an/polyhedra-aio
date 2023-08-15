@@ -34,7 +34,7 @@ class ZkBridge(Help):
         self.address = self.account.address
         self.nft = random.choice(nft) if type(nft) == list else nft
         self.nft_address = nfts_addresses[self.nft][self.chain]
-        self.bridge_address = nft_lz_bridge_addresses[self.chain] if self.nft == 'Pandra' and self.to_chain not in (Chain.COMBO_TESTNET, Chain.OP_BNB) else nft_bridge_addresses[self.chain]
+        self.bridge_address = nft_bridge_addresses[self.chain]
         self.moralisapi = MORALIS_API_KEY
         self.proxy = proxy or None
         self.logger = write_to_logs(self.wallet_name)
@@ -123,16 +123,7 @@ class ZkBridge(Help):
             return False
 
     async def balance_and_get_id(self):
-        # try:
-        #     token_id = await self.check_nft_presence(self.w3, self.nft_address, self.address, zk_nft_abi)
-        #     return token_id  
-        # except Exception as e:
-        #     if 'list index out of range' in str(e):
-        #         self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
-        #         return None
-        #     else:
-        #         self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')
-        if self.chain not in [Chain.CORE, Chain.CELO]:
+        if self.chain not in [Chain.CORE, Chain.CELO, Chain.BSC_TESTNET]:
             try:
                 api_key = self.moralisapi
                 params = {
@@ -222,14 +213,27 @@ class ZkBridge(Help):
                     return False
 
     async def claim_nft(self, sender_tx_hash):
-        # time_ = random.randint(DELAY[0], DELAY[1])
-        time_ = 1
+        time_ = random.randint(DELAY[0], DELAY[1])
         self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
         await asyncio.sleep(time_)
 
-        headers = await self.profile()
-        if headers is None:
-            return False
+        ua = UserAgent()
+        ua = ua.random
+        headers = {
+            'authority': 'api.zkbridge.com',
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'hu-HU,hu;q=0.9,en-US;q=0.8,en;q=0.7',
+            'content-type': 'application/json',
+            'origin': 'https://zkbridge.com',
+            'referer': 'https://zkbridge.com/',
+            'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-site',
+            'user-agent': ua,
+        }
         
         json_data = {
             'tx_hash': sender_tx_hash,
@@ -247,41 +251,42 @@ class ZkBridge(Help):
         log_index = json.loads(response.text)['proof_index']
         mpt_proof = json.loads(response.text)['proof_blob']
 
-        self.w3 = Web3(Web3.HTTPProvider(DATA[self.to_chain]['rpc']))
-        # self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.to_chain]['rpc']),
-        #             modules={'eth': (AsyncEth,)}, middlewares=[])
+        self.w3 = Web3(Web3.AsyncHTTPProvider(DATA[self.to_chain]['rpc']),
+                    modules={'eth': (AsyncEth,)}, middlewares=[])
 
         self.account = self.w3.eth.account.from_key(self.private_key)
         self.address = self.account.address
-        # script_dir = os.path.dirname(os.path.abspath(__file__))
-        # project_root = os.path.dirname(script_dir)
-        # abi_path = os.path.join(project_root, 'util', 'validate_abi.json')
-
-        # abi_validate = json.load(open(abi_path))
 
         claim_address = self.w3.to_checksum_address(nft_claim_addresses[self.to_chain])
         claim_contract = self.w3.eth.contract(address=claim_address, abi=claim_abi)
 
         try:
-            nonce = self.w3.eth.get_transaction_count(self.address)
+            nonce = await self.w3.eth.get_transaction_count(self.address)
             chain_id = DATA[self.to_chain]['chain_id']
-            tx = claim_contract.functions.validateTransactionProof(src_chain_id, src_block_hash, log_index, mpt_proof
+
+            await self.sleep_indicator(self.chain, 5)
+            self.logger.info(f'{self.wallet_name} | {self.address} | {self.to_chain} - билдим транзакцию...')
+
+            tx = await claim_contract.functions.validateTransactionProof(src_chain_id, src_block_hash, log_index, mpt_proof
                                                                 ).build_transaction({
                 'from': self.address,
-                'gasPrice': self.w3.eth.gas_price,
+                'gasPrice': await self.w3.eth.gas_price,
                 'chainId': chain_id,
                 'nonce': nonce
             })
 
-            #gasLimit = ww3.eth.estimate_gas(txn)
-            #txn['gas'] = int(gasLimit * 1.3)
+            self.logger.info(f'{self.wallet_name} | {self.address} | {self.to_chain} - сбилдили транзакцию...')
+
+            await self.sleep_indicator(self.chain, 3)
             self.logger.info(f'{self.wallet_name} | {self.address} | {self.to_chain} - начался клейм "{self.nft}"...')
+
             signed_tx = self.w3.eth.account.sign_transaction(tx, private_key=self.private_key)
-            tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+            tx_hash = await self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
             scan = DATA[self.to_chain]['scan']
-            # status = await self.check_status_tx(self.wallet_name, self.address, self.to_chain, tx_hash)
-            # if status == 1:
-            self.logger.success(f'{self.wallet_name} | {self.address} | {self.to_chain} - успешно заклеймил "{self.nft}": {scan}{self.w3.to_hex(tx_hash)}...')
+            status = await self.check_status_tx(self.wallet_name, self.address, self.to_chain, tx_hash)
+            
+            if status == 1:
+                self.logger.success(f'{self.wallet_name} | {self.address} | {self.to_chain} - успешно заклеймил "{self.nft}": {scan}{self.w3.to_hex(tx_hash)}...')
         except Exception as e:
             error = str(e)
             if 'nonce too low' in error or 'already known' in error:
