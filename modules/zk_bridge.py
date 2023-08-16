@@ -34,7 +34,7 @@ class ZkBridge(Help):
         self.address = self.account.address
         self.nft = random.choice(nft) if type(nft) == list else nft
         self.nft_address = nfts_addresses[self.nft][self.chain]
-        self.bridge_address = nft_bridge_addresses[self.chain]
+        self.bridge_address = nft_lz_bridge_addresses[self.chain] if self.nft == 'Pandra' and self.to_chain not in non_lz_chains else nft_bridge_addresses[self.chain]
         self.moralisapi = MORALIS_API_KEY
         self.proxy = proxy or None
         self.logger = write_to_logs(self.wallet_name)

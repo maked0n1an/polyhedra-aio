@@ -145,7 +145,7 @@ async def do_pandra_operations(private_key, wallet_name, proxy, grind_list):
             zk.logger.info(f'{wallet_name} | Запущен минт и бридж {zk.nft}: {chain[0]} -> {chain[1]}')
             tx_hash = await zk.bridge_nft()
             
-            if chain[1] in (Chain.COMBO_TESTNET, Chain.OP_BNB):
+            if chain[1] in (Chain.COMBO_TESTNET, Chain.OP_BNB, Chain.BSC_TESTNET):
                 zk.logger.info(f'{wallet_name} | Запущен клейм {zk.nft} в {chain[1]}')
                 await zk.claim_nft(tx_hash)
         elif(len(chain) == 3):

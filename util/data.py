@@ -11,7 +11,7 @@ DATA = {
 
     Chain.BSC                       : {'rpc': 'https://rpc.ankr.com/bsc', 'scan': 'https://bscscan.com/tx/', 'token': 'BNB', 'chain_id': 56},
 
-    Chain.BSC_TESTNET               : {'rpc': 'https://data-seed-prebsc-1-s1.binance.org:8545', 'scan': 'https://testnet.bscscan.com', 'token': 'tBNB', 'chain_id': 97},
+    Chain.BSC_TESTNET               : {'rpc': 'https://data-seed-prebsc-1-s1.binance.org:8545', 'scan': 'https://testnet.bscscan.com/tx/', 'token': 'tBNB', 'chain_id': 97},
 
     Chain.CELO                      : {'rpc': 'https://rpc.ankr.com/celo', 'scan': 'https://celoscan.io/tx/', 'token': 'CELO', 'chain_id': 42220},
 
@@ -100,15 +100,29 @@ lzdst_addresses = {
     Chain.MOONBEAM:             '0xe6eb0b3A1b0c542aCCB40a86565786Fcf8a42EF0'
 }
 
+non_lz_chains = [
+    Chain.BSC_TESTNET,
+    Chain.COMBO_TESTNET,
+    Chain.OP_BNB
+]
+
 nft_bridge_addresses = {
-    Chain.BSC:                  '0xE09828f0DA805523878Be66EA2a70240d312001e', # LZ_endpoint
-    Chain.POLYGON:              '0x2E953a70C37E8CB4553DAe1F5760128237c8820D', # LZ_endpoint  
-    Chain.CORE:                 '0x5c5979832a60c17bb06676fa906bedd1a013e18c', # LZ_endpoint  
-    Chain.CELO:                 '0x24339b7f8d303527C8681382AbD4Ec299757aF63', # LZ_endpoint  
-    Chain.MANTLE:               '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7', # LZ_endpoint  
-    Chain.COMBO_TESTNET:        '0xe09828f0da805523878be66ea2a70240d312001e',   
-    Chain.OP_BNB:               '0xe09828f0da805523878be66ea2a70240d312001e',   
+    Chain.BSC:                  '0xE09828f0DA805523878Be66EA2a70240d312001e',
+    Chain.POLYGON:              '0x2E953a70C37E8CB4553DAe1F5760128237c8820D',
+    Chain.CORE:                 '0x5c5979832a60c17bb06676fa906bedd1a013e18c',
+    Chain.CELO:                 '0x24339b7f8d303527C8681382AbD4Ec299757aF63',
+    Chain.MANTLE:               '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7',   
+    Chain.COMBO_TESTNET:        '0xe09828f0da805523878be66ea2a70240d312001e',
+    Chain.OP_BNB:               '0x4CC870C8fDfBC512943FE60c29c98d515f868EBF',   
     Chain.BSC_TESTNET:          '0x5b2d3EcA3D64CE47A675317D1D290D9B8E87E8Dc',
+}
+
+nft_lz_bridge_addresses = {
+    Chain.BSC:                  '0x3668c325501322CEB5a624E95b9E16A019cDEBe8',
+    Chain.POLYGON:              '0xffdf4fe05899c4bdb1676e958fa9f21c19ecb9d5',
+    Chain.CORE:                 '0x3701c5897710f16f1f75c6eae258bf11ee189a5d',
+    Chain.CELO:                 '0xe47b0a5F2444F9B360Bd18b744B8D511CfBF98c6',
+    Chain.MANTLE:               '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7',
 }
 
 nft_claim_addresses = {
