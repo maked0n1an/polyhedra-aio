@@ -216,7 +216,7 @@ class ZkBridge(Help):
         time_ = random.randint(DELAY[0], DELAY[1])
 
         if self.chain in [Chain.POLYGON, Chain.CORE] and self.to_chain in [Chain.OP_BNB, Chain.COMBO_TESTNET]:
-            time = BIG_DELAY           
+            time_ = BIG_DELAY           
 
         self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
         await asyncio.sleep(time_)
