@@ -1,6 +1,7 @@
 import time
 import asyncio
 import random
+from web3 import Web3
 from loguru import logger
 from input_data.config import *
 from util.data import *
