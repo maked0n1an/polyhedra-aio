@@ -215,7 +215,7 @@ class ZkBridge(Help):
     async def claim_nft(self, sender_tx_hash):
         time_ = random.randint(DELAY[0], DELAY[1])
 
-        if self.to_chain in [Chain.POLYGON, Chain.CORE]:
+        if self.chain in [Chain.POLYGON, Chain.CORE] and self.to_chain in [Chain.OP_BNB, Chain.COMBO_TESTNET]:
             time = BIG_DELAY           
 
         self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
