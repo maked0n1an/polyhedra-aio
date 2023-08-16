@@ -52,7 +52,7 @@ class Help:
 
     async def check_nft_presence(self, w3, nft_address, account_address, nft_abi):
         try:
-            contract = self.w3.eth.contract(address=self.nft_address, abi=nft_abi)
+            contract = self.w3.eth.contract(address=Web3.to_checksum_address(self.nft_address), abi=nft_abi)
             balance = await contract.functions.balanceOf(self.address).call()
             if balance > 0:
                 totalSupply = await contract.functions.totalSupply().call()
