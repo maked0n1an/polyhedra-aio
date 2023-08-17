@@ -10,20 +10,22 @@ from util.chain import Chain
     Прокси - по желанию, но рекомендую при большом количестве кошельков,
     нужно вставить в формате  protocol//:login:pass@ip:port 
     в файле proxies.txt
+
+    Закоменти или раскоменти внизу то, что тебе (не) нужно по активностям
 '''
 
 activities_list = [
-        # Activity.GREENFIELD_TESTNET_MINT,
-        # Activity.OP_BNB_OPERATIONS,
+        Activity.GREENFIELD_TESTNET_MINT,
+        Activity.OP_BNB_OPERATIONS,
         Activity.PANDRA_CODECONQUEROR_OPERATIONS,
         Activity.PANDRA_PIXELBROWLER_OPERATIONS,
         Activity.PANDRA_MELODYMAVEN_OPERATIONS,
         Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
         Activity.PANDRA_MANTLE_OPERATIONS,
-        # Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
-        # Activity.BSC_POLYGON_ZKMESSENGER,
-        # Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
-        # Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS,
+        Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
+        Activity.BSC_POLYGON_ZKMESSENGER,
+        Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
+        Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS,
         Activity.LEGENDARY_PANDA_GRIND_OPERATIONS
     ]
 

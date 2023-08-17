@@ -174,7 +174,7 @@ async def do_pandra_operations(private_key, wallet_name, proxy, grind_list):
         zk = ZkBridge(private_key=private_key,
                 wallet_name=wallet_name,
                 chain=mint_chain,
-                to_chain=None,
+                to_chain=Chain.BSC,
                 nft='Pandra',
                 proxy=proxy)
         zk.logger.info(f'{wallet_name} | Запущен минт {zk.nft}: {mint_chain}')
