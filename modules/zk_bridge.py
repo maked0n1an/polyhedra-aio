@@ -123,7 +123,7 @@ class ZkBridge(Help):
             return False
 
     async def balance_and_get_id(self):
-        if self.chain not in [Chain.CORE, Chain.CELO, Chain.BSC_TESTNET]:
+        if self.chain not in [Chain.CORE, Chain.CELO, Chain.BSC_TESTNET, Chain.COMBO_TESTNET, Chain.OP_BNB]:
             try:
                 api_key = self.moralisapi
                 params = {
@@ -215,7 +215,7 @@ class ZkBridge(Help):
     async def claim_nft(self, sender_tx_hash):
         time_ = random.randint(DELAY[0], DELAY[1])
 
-        if self.chain in [Chain.POLYGON, Chain.CORE] and self.to_chain in [Chain.OP_BNB, Chain.COMBO_TESTNET]:
+        if self.chain in [Chain.POLYGON, Chain.CORE] and self.to_chain in non_lz_chains:
             time_ = BIG_DELAY           
 
         self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
@@ -387,7 +387,7 @@ class ZkBridge(Help):
 
         async def bridge_():
             bridge = self.w3.eth.contract(address=Web3.to_checksum_address(self.bridge_address),
-                        abi=bridge_lz_abi if self.nft == 'Pandra' and self.to_chain not in (Chain.COMBO_TESTNET, Chain.OP_BNB) else bridge_abi)
+                        abi=bridge_lz_abi if self.nft == 'Pandra' and self.to_chain not in non_lz_chains else bridge_abi)
 
             self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - начинаю бридж "{self.nft}"[{id_}]...')
             while True:

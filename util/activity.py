@@ -14,4 +14,5 @@ class Activity(Enum):
     BSC_POLYGON_ZKMESSENGER                 = 8     # Send a cross-chain message using Greenfield zkMessenger on https://zkbridge.com/messenger before August 1st, 2023.
     BNB_CHAIN_LUBAN_NFT_OPERATIONS          = 9     # BNB Luban NFT mint and bridge before August 1st, 2023.
     ZK_LIGHT_CLIENT_NFT_OPERATIONS          = 10    # Mint and bridge
-    LEGENDARY_PANDA_GRIND_OPERATIONS        = 11
+    COMBO_MYSTERY_BOX_OPERATIONS            = 11    # Mint and bridge COMBO Mystery Box from Combo to opBNB
+    LEGENDARY_PANDA_GRIND_OPERATIONS        = 12

@@ -35,7 +35,7 @@ PANDRA_GRIND_ROUTE = 'Uncommon'
 # Нужно ли мешать кошельки? | Да - 1, Нет - 0
 IS_SHUFFLE_KEYS = 1
 
-# INITIAL_DELAY отвечает за начальную задержку между кошельками, нужна для одновременного запуска несколька кошелей, смотри wallets_in_batch выше
+# INITIAL_DELAY отвечает за начальную задержку между кошельками, нужна для одновременного запуска несколька кошелей
 # рекомендую не менять для максимального рандома
 INITIAL_DELAY = (100, 3000)
 
@@ -43,7 +43,7 @@ INITIAL_DELAY = (100, 3000)
 DELAY = (30, 100)
 
 # для клейма NFT, отправленных с polygon или core
-BIG_DELAY = 250 
+BIG_DELAY = 500 
 
 # moralis api key - https://admin.moralis.io/login идем сюда и получаем апи ключ, НУЖЕН DEFAULT KEY!, нужно для нахождения id нфт
 MORALIS_API_KEY = ''
@@ -65,6 +65,7 @@ MAINNET_ALPHA_NFT_CORE_BRIDGE   = Chain.CORE, Chain.POLYGON
 BSC_POLYGON_ZKMESSENGER         = Chain.BSC, Chain.ARBITRUM_NOVA
 BNB_CHAIN_LUBAN_NFT_BRIDGE      = Chain.BSC, [Chain.POLYGON, Chain.CELO, Chain.CORE]
 ZK_LIGHT_CLIENT_NFT_BRIDGE      = Chain.BSC, [Chain.POLYGON, Chain.CORE, Chain.CELO]
+COMBO_MYSTERY_BOX_BRIDGE        = Chain.COMBO_TESTNET, Chain.OP_BNB
 
 legendary_pandra_config = [ # 20 bridges + 5 mints
     #############################################========================= 

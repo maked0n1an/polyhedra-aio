@@ -7,7 +7,7 @@ from modules.zk_bridge import ZkBridge
 from modules.zk_message import ZkMessage
 from util.chain import Chain
 from util.activity import Activity
-from util.data import nfts_addresses
+from util.data import nfts_addresses, non_lz_chains
 
 async def do_greenfield_mint_nft(private_key, wallet_name, proxy):
     zk = ZkBridge(wallet_name=wallet_name,
@@ -126,6 +126,17 @@ async def do_zk_light_client_operations(private_key, wallet_name, proxy):
     zk.logger.info(f'{wallet_name} | Запущен минт и бридж ZkLightClient NFT')
     await zk.bridge_nft()
 
+async def do_combo_mystery_box_operations(private_key, wallet_name, proxy):
+    zk = ZkBridge(private_key=private_key,
+        wallet_name=wallet_name,
+        chain=COMBO_MYSTERY_BOX_BRIDGE[0],
+        to_chain=COMBO_MYSTERY_BOX_BRIDGE[1],
+        nft='Combo Mystery Box',
+        proxy=proxy)
+    # Not work, in progress
+    zk.logger.info(f'{wallet_name} | Запущен минт и бридж COMBO Mystery Box NFT')
+    await zk.bridge_nft()
+
 async def do_pandra_operations(private_key, wallet_name, proxy, grind_list):
     bridge_pandra_copy = grind_list.copy()
     mint_config_copy = mint_pandra_config.copy()
@@ -145,7 +156,7 @@ async def do_pandra_operations(private_key, wallet_name, proxy, grind_list):
             zk.logger.info(f'{wallet_name} | Запущен минт и бридж {zk.nft}: {chain[0]} -> {chain[1]}')
             tx_hash = await zk.bridge_nft()
             
-            if chain[1] in (Chain.COMBO_TESTNET, Chain.OP_BNB, Chain.BSC_TESTNET):
+            if chain[1] in non_lz_chains:
                 zk.logger.info(f'{wallet_name} | Запущен клейм {zk.nft} в {chain[1]}')
                 await zk.claim_nft(tx_hash)
         elif(len(chain) == 3):
@@ -174,7 +185,7 @@ async def do_pandra_operations(private_key, wallet_name, proxy, grind_list):
         zk = ZkBridge(private_key=private_key,
                 wallet_name=wallet_name,
                 chain=mint_chain,
-                to_chain=Chain.BSC,
+                to_chain=mint_chain,
                 nft='Pandra',
                 proxy=proxy)
         zk.logger.info(f'{wallet_name} | Запущен минт {zk.nft}: {mint_chain}')

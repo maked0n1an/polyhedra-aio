@@ -167,10 +167,12 @@ nfts_addresses = {
         Chain.CELO:             '0xb404e5233aB7E426213998C025f05EaBaBD41Da6',
         Chain.BSC_TESTNET:      '0x95A44287A6D208FA723A899D971d3976cA985ba6',
     },
-
     'Bridged Pandra': {
         Chain.CELO:          '0x9d03ab31c0e71d909c68d3f6bb7483577ba8dcd7', # Pandra: Ecoguardian (Celo) in Polygon
         Chain.CORE:          '0x20fb7ec336958ea887a288ce49999d7d7c08529c', # Pandra: MelodyMaven (Core) in Polygon
+    },
+    'Combo Mystery Box': {
+        Chain.COMBO_TESTNET:    '0x514a16edd7a916efc662d1e360684602fd72dcd7'
     }
 }
 
