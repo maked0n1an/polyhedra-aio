@@ -143,7 +143,7 @@ class ZkBridge(Help):
                     return id_  
             except Exception as e:
                 if 'list index out of range' in str(e):
-                    self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
+                    self.logger.warning(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
                     return None
                 else:
                     self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')         
@@ -153,7 +153,7 @@ class ZkBridge(Help):
                 return token_id  
             except Exception as e:
                 if 'list index out of range' in str(e):
-                    self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
+                    self.logger.warning(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')
                     return None
                 else:
                     self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')                     

@@ -69,6 +69,9 @@ async def run_activity(activity: Activity, wallet_name, private_key, proxy):
 
     if activity == Activity.COMBO_MYSTERY_BOX_OPERATIONS:
         await do_combo_mystery_box_operations(private_key=private_key, wallet_name=wallet_name, proxy=proxy)
+
+    if activity == Activity.MINT_ALL_PANDAS:
+        await do_mint_all_pandas(private_key=private_key, wallet_name=wallet_name, proxy=proxy)
     
     if activity == Activity.LEGENDARY_PANDA_GRIND_OPERATIONS:
         route_for_grind = []

@@ -137,6 +137,20 @@ async def do_combo_mystery_box_operations(private_key, wallet_name, proxy):
     zk.logger.info(f'{wallet_name} | Запущен минт и бридж COMBO Mystery Box NFT')
     await zk.bridge_nft()
 
+async def do_mint_all_pandas(private_key, wallet_name, proxy):
+    mint_config_copy = mint_pandra_config.copy()
+    random.shuffle(mint_config_copy)
+    
+    for mint_chain in mint_config_copy:
+        zk = ZkBridge(private_key=private_key,
+                wallet_name=wallet_name,
+                chain=mint_chain,
+                to_chain=mint_chain,
+                nft='Pandra',
+                proxy=proxy)
+        zk.logger.info(f'{wallet_name} | Запущен минт {zk.nft}: {mint_chain}')
+        await zk.mint()    
+
 async def do_pandra_operations(private_key, wallet_name, proxy, grind_list):
     bridge_pandra_copy = grind_list.copy()
     mint_config_copy = mint_pandra_config.copy()

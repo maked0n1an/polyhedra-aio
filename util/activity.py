@@ -16,3 +16,4 @@ class Activity(Enum):
     ZK_LIGHT_CLIENT_NFT_OPERATIONS          = 10    # Mint and bridge
     COMBO_MYSTERY_BOX_OPERATIONS            = 11    # Mint and bridge COMBO Mystery Box from Combo to opBNB
     LEGENDARY_PANDA_GRIND_OPERATIONS        = 12
+    MINT_ALL_PANDAS                         = 13
