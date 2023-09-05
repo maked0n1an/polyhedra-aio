@@ -26,7 +26,8 @@ activities_list = [
         # Activity.BSC_POLYGON_ZKMESSENGER,
         # Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
         # Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS,
-        Activity.LEGENDARY_PANDA_GRIND_OPERATIONS
+        # Activity.MINT_ALL_PANDAS
+        Activity.LEGENDARY_PANDA_GRIND_OPERATIONS,
     ]
 
 # Доступные маршруты гринда: 'Uncommon' | 'Rare' | 'Epic' | 'Legendary'
