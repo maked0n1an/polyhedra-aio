@@ -15,17 +15,17 @@ from util.chain import Chain
 '''
 
 activities_list = [
-        Activity.GREENFIELD_TESTNET_MINT,
-        Activity.OP_BNB_OPERATIONS,
-        Activity.PANDRA_CODECONQUEROR_OPERATIONS,
-        Activity.PANDRA_PIXELBROWLER_OPERATIONS,
-        Activity.PANDRA_MELODYMAVEN_OPERATIONS,
-        Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
-        Activity.PANDRA_MANTLE_OPERATIONS,
-        Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
-        Activity.BSC_POLYGON_ZKMESSENGER,
-        Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
-        Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS,
+        # Activity.GREENFIELD_TESTNET_MINT,
+        # Activity.OP_BNB_OPERATIONS,
+        # Activity.PANDRA_CODECONQUEROR_OPERATIONS,
+        # Activity.PANDRA_PIXELBROWLER_OPERATIONS,
+        # Activity.PANDRA_MELODYMAVEN_OPERATIONS,
+        # Activity.PANDRA_ECOGUARDIAN_OPERATIONS,
+        # Activity.PANDRA_MANTLE_OPERATIONS,
+        # Activity.MAINNET_ALPHA_NFT_CORE_DAO_OPERATIONS,
+        # Activity.BSC_POLYGON_ZKMESSENGER,
+        # Activity.ZK_LIGHT_CLIENT_NFT_OPERATIONS,
+        # Activity.BNB_CHAIN_LUBAN_NFT_OPERATIONS,
         Activity.LEGENDARY_PANDA_GRIND_OPERATIONS
     ]
 
@@ -188,5 +188,9 @@ uncommon_pandra_config = [ # 5 bridges + 5 mints
 ]
 
 mint_pandra_config = [
-    Chain.CORE, Chain.CELO, Chain.POLYGON, Chain.BSC, Chain.BSC_TESTNET 
+    Chain.CORE, 
+    Chain.CELO, 
+    Chain.POLYGON, 
+    Chain.BSC, 
+    # Chain.BSC_TESTNET 
 ]
