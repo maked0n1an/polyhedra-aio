@@ -196,7 +196,7 @@ class ZkBridge(Help):
                         time_ = BIG_DELAY
 
                     self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
-                    await self.sleep_indicator(self.chain)                           
+                    await self.sleep_indicator(self.chain, time_)         
                     
                     return headers
                 else:
@@ -291,6 +291,12 @@ class ZkBridge(Help):
             
             if status == 1:
                 self.logger.success(f'{self.wallet_name} | {self.address} | {self.to_chain} - успешно заклеймил "{self.nft}": {scan}{self.w3.to_hex(tx_hash)}...')
+                time_ = random.randint(DELAY[0], DELAY[1])
+
+                self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
+                await self.sleep_indicator(self.chain, time_)  
+
+                return True
         except Exception as e:
             error = str(e)
             if 'nonce too low' in error or 'already known' in error:
@@ -313,12 +319,9 @@ class ZkBridge(Help):
                 return False
 
     async def bridge_nft(self):
-        time_ = random.randint(DELAY[0], DELAY[1])
-        self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
-        await asyncio.sleep(time_)
         id_ = await self.balance_and_get_id()
-
         headers = await self.profile()
+
         if headers is None:
             return False
         
@@ -436,7 +439,11 @@ class ZkBridge(Help):
                     if status == 1:
                         self.logger.success(
                             f'{self.wallet_name} | {self.address} | {self.chain} - успешно бриджанул "{self.nft}"[{id_}] в {self.to_chain}: {scan}{self.w3.to_hex(tx_hash)}...')
-                        await self.sleep_indicator(self.chain)
+                        time_ = random.randint(DELAY[0], DELAY[1])
+
+                        self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
+                        await self.sleep_indicator(self.chain, time_)  
+
                         return self.w3.to_hex(tx_hash)
                     else:
                         self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пробую бриджить еще раз...')
