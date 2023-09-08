@@ -189,7 +189,15 @@ class ZkBridge(Help):
                 if status == 1:
                     self.logger.success(
                         f'{self.wallet_name} | {self.address} | {self.chain} - успешно заминтил "{self.nft}" : {scan}{self.w3.to_hex(tx_hash)}...')
-                    await self.sleep_indicator(self.chain)
+
+                    time_ = random.randint(DELAY[0], DELAY[1]) 
+
+                    if self.chain in [Chain.POLYGON, Chain.CORE] and self.to_chain in non_lz_chains:                        
+                        time_ = BIG_DELAY
+
+                    self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
+                    await self.sleep_indicator(self.chain)                           
+                    
                     return headers
                 else:
                     self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - пробую минт еще раз...')
@@ -213,14 +221,6 @@ class ZkBridge(Help):
                     return False
 
     async def claim_nft(self, sender_tx_hash):
-        time_ = random.randint(DELAY[0], DELAY[1])
-
-        if self.chain in [Chain.POLYGON, Chain.CORE] and self.to_chain in non_lz_chains:
-            time_ = BIG_DELAY           
-
-        self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
-        await asyncio.sleep(time_)
-
         try:
             ua = UserAgent()
             ua = ua.random
