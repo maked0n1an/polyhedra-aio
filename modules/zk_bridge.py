@@ -194,8 +194,7 @@ class ZkBridge(Help):
 
                     if self.chain in [Chain.POLYGON, Chain.CORE] and self.to_chain in non_lz_chains:                        
                         time_ = BIG_DELAY
-
-                    self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
+                    
                     await self.sleep_indicator(self.chain, time_)         
                     
                     return headers
@@ -454,13 +453,13 @@ class ZkBridge(Help):
                         self.logger.error(
                             f'{self.wallet_name} | {self.address} | {self.chain} - не хватает денег на газ, заканчиваю работу через 5 секунд...')
                         await asyncio.sleep(5)
-                        return self.private_key, self.address, f'error bridge "{self.nft}" - not gas'
+                        return False
                     if 'nonce too low' in error or 'already known' in error:
                         self.logger.info(f'{self.wallet_name} | {self.address} | {self.chain} - ошибка при бридже, пробую еще раз...')
                         await bridge_()
                     else:
                         self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}')
-                        return self.private_key, self.address, f'error bridge "{self.nft}" - {e}'
+                        return False
 
         if await approve_nft(self):
             return await bridge_()
