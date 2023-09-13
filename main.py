@@ -108,6 +108,9 @@ async def main():
 
     logger.info('The bot has been started')
 
+    if IS_SHUFFLE_PROXIES:
+        random.shuffle(PROXIES)
+
     wallet_key_proxy_tuple = {
         pair: proxy for pair, proxy in zip(zip(WALLET_NAMES, PRIVATE_KEYS), PROXIES * len(PRIVATE_KEYS))
     }
