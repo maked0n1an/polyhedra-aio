@@ -292,7 +292,6 @@ class ZkBridge(Help):
                 self.logger.success(f'{self.wallet_name} | {self.address} | {self.to_chain} - успешно заклеймил "{self.nft}": {scan}{self.w3.to_hex(tx_hash)}...')
                 time_ = random.randint(DELAY[0], DELAY[1])
 
-                self.logger.info(f'{self.wallet_name} | {self.address} - начинаю работу через {time_} cекунд...')
                 await self.sleep_indicator(self.chain, time_)  
 
                 return True
