@@ -54,4 +54,8 @@ def write_to_main_log():
         "</cyan> <white>{message}</white>",
     )
     
+    logger.level("HAS_NFT", no=26, color="<green>")
+    logger.level("NFT_BRIDGED", no=27, color="<green>")
+    logger.level("NFT_MINTED", no=28, color="<green>")
+    
     return logger
