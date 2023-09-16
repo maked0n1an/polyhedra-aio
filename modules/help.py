@@ -3,6 +3,7 @@ import asyncio
 import random
 from web3 import Web3
 from loguru import logger
+
 from input_data.config import *
 from util.data import *
 from util.chain import Chain
@@ -51,7 +52,7 @@ class Help:
 
         return tx
 
-    async def check_nft_presence(self, w3, nft_address, account_address, nft_abi):
+    async def check_nft_presence(self, nft_abi):
         try:
             contract = self.w3.eth.contract(address=Web3.to_checksum_address(self.nft_address), abi=nft_abi)
             balance = await contract.functions.balanceOf(self.address).call()

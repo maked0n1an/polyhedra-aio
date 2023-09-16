@@ -1,12 +1,10 @@
 import json
-import time
 import random
 import asyncio
 import aiohttp
 import requests
 
 from web3 import Web3
-from loguru import logger
 from fake_useragent import UserAgent
 from eth_account.messages import encode_defunct
 from web3.eth import AsyncEth
@@ -147,8 +145,8 @@ class ZkBridge(Help):
                     self.logger.error(f'{self.wallet_name} | {self.address} | {self.chain} - {e}...')         
         else:
             try:
-                token_id = await self.check_nft_presence(self.w3, self.nft_address, self.address, zk_nft_abi)
-                return token_id  
+                token_id = await self.check_nft_presence(zk_nft_abi)
+                return token_id
             except Exception as e:
                 if 'list index out of range' in str(e):
                     self.logger.warning(f'{self.wallet_name} | {self.address} | {self.chain} - на кошельке отсутсвует "{self.nft}"...')

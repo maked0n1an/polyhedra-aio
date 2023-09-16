@@ -1,12 +1,9 @@
-import asyncio
 import random
 from loguru import logger
 
 from input_data.config import *
 from modules.zk_bridge import ZkBridge
 from modules.zk_message import ZkMessage
-from util.chain import Chain
-from util.activity import Activity
 from util.data import nfts_addresses, non_lz_chains
 
 async def do_greenfield_mint_nft(private_key, wallet_name, proxy):
