@@ -5,17 +5,14 @@ import aiohttp
 import time
 
 from web3 import Web3
-from loguru import logger
 from fake_useragent import UserAgent
 from eth_account.messages import encode_defunct
 from web3.eth import AsyncEth
 from eth_utils import *
-from moralis import evm_api
 
 from input_data.config import *
 from modules.help import Help
 from util.data import *
-from util.chain import Chain
 from util.file_utils import *
 
 

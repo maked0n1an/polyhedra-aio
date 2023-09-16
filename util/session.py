@@ -1,10 +1,5 @@
 import requests
 
-from enum import Enum
-from web3 import Web3
-from util.chain import Chain
-
-
 class Session:
     @staticmethod
     def get_web3_session_via_proxy(proxy: str):

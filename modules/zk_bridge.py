@@ -4,8 +4,6 @@ import random
 import asyncio
 import aiohttp
 import requests
-import copy
-import os
 
 from web3 import Web3
 from loguru import logger
